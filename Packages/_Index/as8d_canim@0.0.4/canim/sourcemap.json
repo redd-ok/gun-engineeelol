@@ -1,0 +1,1 @@
+{"name":"Canim","className":"ModuleScript","filePaths":["src\\init.luau","default.project.json"],"children":[{"name":"TS","className":"Folder","children":[{"name":"RuntimeLib","className":"ModuleScript","filePaths":["src\\TS\\RuntimeLib.luau"]}]},{"name":"easing","className":"ModuleScript","filePaths":["src\\easing.luau"]}]}

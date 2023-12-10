@@ -1,0 +1,66 @@
+{
+  "name": "gun-engineeelol",
+  "tree": {
+    "$className": "DataModel",
+
+    "Lighting": {
+      "atmospehere": {
+        "$className": "Atmosphere",
+        "$properties": {
+
+        }
+      },
+
+      "$properties": {
+        "Technology": "Future",
+        "Ambient": [1, 1, 1],
+
+        "EnvironmentDiffuseScale": 1,
+        "EnvironmentSpecularScale": 1,
+
+        "ExposureCompensation": 0.35
+      }
+    },
+
+    "Workspace": {
+      "$ignoreUnknownInstances": true,
+
+      "Terrain": {
+        "$className": "Terrain",
+        "clouds": {
+          "$className": "Clouds"
+        }
+      },
+
+      "$path": "world"
+    },
+
+    "ReplicatedStorage": {
+        "$className": "ReplicatedStorage",
+        "Shared": {"$path": "src/shared"},
+        "Lib": {"$path": "Packages"},
+        "Arms": {"$path": "assets/arms"},
+        "WeaponModels": {"$path": "assets/weapons"},
+        "WeaponConfigs": {"$path": "wepconfigs"},
+        "Events": {"$path": "events"}
+    },
+
+    "ServerScriptService": {
+      "ServerFramework": {
+        "$path": "src/server"
+      }
+    },
+
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        "ClientFramework": {
+          "$path": "src/client"
+        }
+      },
+
+      "$properties" : {
+        "GameSettingsAvatar" : "R6"
+      }
+    }
+  }
+}

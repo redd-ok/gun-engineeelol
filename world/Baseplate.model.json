@@ -1,0 +1,49 @@
+{
+	"ClassName": "Part",
+	"Properties": {
+		"Size": [2048, 16, 2048],
+		"Anchored": true,
+		"TopSurface": "Smooth",
+		"BottomSurface": "Smooth",
+
+		"Color": [99, 95, 98]
+	},
+	"Children": [
+		{
+			"ClassName": "Texture",
+			"Properties": {
+				"Face": "Top",
+				"Texture": "rbxassetid://6367645866",
+				"StudsPerTileU": 10,
+				"StudsPerTileV": 10
+			}
+		},
+		{
+			"ClassName": "Texture",
+			"Properties": {
+				"Face": "Left",
+				"Texture": "rbxassetid://6367645866",
+				"StudsPerTileU": 10,
+				"StudsPerTileV": 10
+			}
+		},
+		{
+			"ClassName": "Texture",
+			"Properties": {
+				"Face": "Bottom",
+				"Texture": "rbxassetid://6367645866",
+				"StudsPerTileU": 10,
+				"StudsPerTileV": 10
+			}
+		},
+		{
+			"ClassName": "Texture",
+			"Properties": {
+				"Face": "Right",
+				"Texture": "rbxassetid://6367645866",
+				"StudsPerTileU": 10,
+				"StudsPerTileV": 10
+			}
+		}
+	]
+}

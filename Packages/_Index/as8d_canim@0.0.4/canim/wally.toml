@@ -1,0 +1,12 @@
+[package]
+name = "as8d/canim"
+description = "Port of BlackShibes roblox-ts canim library (Renamed Canim class to Animator, do Canim.Animator.new() to create new animators)"
+version = "0.0.4"
+authors = ["BlackShibe"]
+realm = "shared"
+registry = "https://github.com/upliftgames/wally-index"
+exclude = ["Packages"]
+
+[dependencies]
+Promise = "evaera/promise@4.0.0"
+Signal = "stravant/goodsignal@0.2.1"

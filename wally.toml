@@ -1,0 +1,12 @@
+[package]
+name = "user/gun-engineeelol"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
+canim = "as8d/canim@0.0.4"
+Red = "red-blox/red@2.0.0"
+roact = "roblox/roact@1.4.4"
+roact-hooks = "kampfkarren/roact-hooks@0.5.1"
+guard = "red-blox/guard@1.0.1"
