@@ -1,5 +1,6 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 
 local Weld = require(ReplicatedStorage.Shared.Weld)
 
@@ -18,7 +19,7 @@ function gunhandler.new(weapons)
 		self.Viewmodels[i] = self:GenViewmodel(v)
 	end
 
-	self.Connections.PreRender = game:GetService("RunService").PreRender:Connect(function(deltaTimeRender)
+	self.Connections.PreRender = RunService.PreRender:Connect(function(deltaTimeRender)
 		self:step(deltaTimeRender)
 	end)
 
@@ -49,6 +50,8 @@ function gunhandler:step()
 	end
 
 	vm:PivotTo(workspace.CurrentCamera.CFrame)
+
+	Players.LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
 end
 
 function gunhandler:cleanup()

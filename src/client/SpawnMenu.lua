@@ -1,5 +1,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 
 local UI = script.Parent.UI
 local Text = require(UI.Text)
@@ -17,13 +19,13 @@ function SpawnMenu:getUI()
 	local PrimarySize = UDim2.new(0, 350, 0, 40)
 	local PrimarySpacing = 5
 
-	for i, v in {"KE Arms KP-15", "XD!!"} do
+	for i, v in { "KE Arms KP-15" } do
 		if self.Primary == nil then
 			self.Primary = v
 		end
 		Primaries[v] = Roact.createElement(Button, {
 			text = v,
-			pos = PrimaryStartPos + UDim2.fromOffset(0, i*(PrimarySize.Y.Offset + PrimarySpacing)),
+			pos = PrimaryStartPos + UDim2.fromOffset(0, i * (PrimarySize.Y.Offset + PrimarySpacing)),
 			size = PrimarySize,
 
 			highlight = v == self.Primary,
@@ -42,13 +44,13 @@ function SpawnMenu:getUI()
 	local SecondarySize = UDim2.new(0, 350, 0, 40)
 	local SecondarySpacing = 5
 
-	for i, v in {"P320X"} do
+	for i, v in { "P320X" } do
 		if self.Secondary == nil then
 			self.Secondary = v
 		end
 		Secondaries[v] = Roact.createElement(Button, {
 			text = v,
-			pos = SecondaryStartPos + UDim2.fromOffset(0, i*(SecondarySize.Y.Offset + SecondarySpacing)),
+			pos = SecondaryStartPos + UDim2.fromOffset(0, i * (SecondarySize.Y.Offset + SecondarySpacing)),
 			size = SecondarySize,
 
 			highlight = v == self.Secondary,
@@ -61,7 +63,6 @@ function SpawnMenu:getUI()
 			textsize = 18,
 		})
 	end
-
 
 	return Roact.createElement("ScreenGui", {}, {
 		Title = Roact.createElement(Text, {
@@ -94,16 +95,15 @@ function SpawnMenu:getUI()
 
 		SpawnButton = Roact.createElement(Button, {
 			text = "deploy",
-			pos = UDim2.new(0.5, -250/2, 0.8, 0),
+			pos = UDim2.new(0.5, -250 / 2, 0.8, 0),
 			size = UDim2.new(0, 250, 0, 50),
 
 			textsize = 24,
-			
+
 			onClick = function()
-				print("Deploying..")
 				Deploy:Fire(self.Primary, self.Secondary)
-				self:Unmount()
-			end
+				self:cleanup()
+			end,
 		}),
 	})
 end
@@ -112,14 +112,30 @@ function SpawnMenu.new()
 	local self = setmetatable({
 		Primary = nil,
 		Secondary = nil,
-	}, {__index=SpawnMenu})
+
+		Loop = nil,
+		OffsetCF = CFrame.new(),
+	}, { __index = SpawnMenu })
 	self.handle = Roact.mount(self:getUI(), Players.LocalPlayer.PlayerGui, "Spawn Menu")
+	self.Loop = RunService.PreRender:Connect(function()
+		workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
+
+		local mousePos = UserInputService:GetMouseLocation()
+		workspace.CurrentCamera.CFrame = CFrame.new(Vector3.new(40, 25, 40), Vector3.new()) * self.OffsetCF
+		self.OffsetCF = self.OffsetCF:Lerp(
+			CFrame.Angles(0, math.rad((-mousePos.X / workspace.CurrentCamera.ViewportSize.X) + 0.5) * 45, 0)
+				* CFrame.Angles(math.rad((-mousePos.Y / workspace.CurrentCamera.ViewportSize.Y) + 0.5) * 45, 0, 0),
+			0.15
+		)
+	end)
 
 	return self
 end
 
-function SpawnMenu:Unmount()
+function SpawnMenu:cleanup()
 	Roact.unmount(self.handle)
+	self.Loop:Disconnect()
+	workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
 end
 
 return SpawnMenu

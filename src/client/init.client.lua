@@ -27,10 +27,11 @@ end
 
 Players.LocalPlayer.CharacterAdded:Connect(function()
 	if handle then
-		handle = handle:Unmount()
+		handle = handle:cleanup()
 	end
 	if gunhandle then
 		gunhandle:cleanup()
+		Players.LocalPlayer.CameraMode = Enum.CameraMode.Classic
 	end
 
 	handle = Menu.new()
