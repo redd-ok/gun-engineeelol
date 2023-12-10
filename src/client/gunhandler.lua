@@ -1,3 +1,8 @@
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Weld = require(ReplicatedStorage.Shared.Weld)
+
 local gunhandler = {}
 
 function gunhandler.new(weapons)
@@ -9,8 +14,16 @@ function gunhandler.new(weapons)
 	return setmetatable(self, {__index = gunhandler})
 end
 
-function gunhandler:GenViewmodel()
-	
+function gunhandler:GenViewmodel(weapon)
+	local vm = ReplicatedStorage.Arms[Players.LocalPlayer.Team and Players.LocalPlayer.Team.Name or "Neutral"]
+	local model = ReplicatedStorage.WeaponModels[weapon.Name]
+
+	model.Parent = vm
+	model:PivotTo(vm)
+
+	Weld(vm.PrimaryPart, model.PrimaryPart)
+
+	return vm
 end
 
 function gunhandler:step()

@@ -2,8 +2,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LogService = game:GetService("LogService")
 
-local Shared = ReplicatedStorage.Shared
-local Debugger = require(Shared.Debugger).new()
+local Debugger = require(script.Debugger).new()
 
 local InitWeapons = require(ReplicatedStorage.Events.initweps):Client()
 
