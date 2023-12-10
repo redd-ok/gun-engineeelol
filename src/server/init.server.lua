@@ -32,7 +32,7 @@ Deploy:On(function(plr: Player, prim, sec)
 	primModule.Parent = Inv
 	secondModule.Parent = Inv
 
-	InitWeps:Fire(plr, {primModule, secondModule})
+	InitWeps:Fire(plr, {primModule})
 
 	plr.Character.HumanoidRootPart.Anchored = false
 end)

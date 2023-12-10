@@ -6,13 +6,13 @@ local Weld = require(ReplicatedStorage.Shared.Weld)
 local gunhandler = {}
 
 function gunhandler.new(weapons)
-	local self = {
+	local self = setmetatable({
 		Connections={}, 
 		Weapons = weapons, 
 		Viewmodels = {},
 
 		Current = 1,
-	}
+	}, {__index = gunhandler})
 
 	for i, v in self.Weapons do
 		self.Viewmodels[i] = self:GenViewmodel(v)
@@ -22,15 +22,15 @@ function gunhandler.new(weapons)
 		self:step(deltaTimeRender)
 	end)
 
-	return setmetatable(self, {__index = gunhandler})
+	return self
 end
 
 function gunhandler:GenViewmodel(weapon)
 	local vm = ReplicatedStorage.Arms[Players.LocalPlayer.Team and Players.LocalPlayer.Team.Name or "Neutral"]
-	local model = ReplicatedStorage.WeaponModels[weapon.Name]
+	local model = ReplicatedStorage.WeaponModels[weapon.Name]:Clone()
 
 	model.Parent = vm
-	model:PivotTo(vm)
+	model:PivotTo(vm.PrimaryPart.CFrame)
 
 	Weld(vm.PrimaryPart, model.PrimaryPart)
 
@@ -43,7 +43,7 @@ function gunhandler:step()
 	for i, v in self.Viewmodels do
 		if i ~= self.Current and v.Parent ~= nil then
 			v.Parent = nil
-		else
+		elseif i == self.Current and v.Parent ~= workspace.CurrentCamera then
 			v.Parent = workspace.CurrentCamera
 		end
 	end
