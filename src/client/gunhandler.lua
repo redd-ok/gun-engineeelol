@@ -6,7 +6,18 @@ local Weld = require(ReplicatedStorage.Shared.Weld)
 local gunhandler = {}
 
 function gunhandler.new(weapons)
-	local self = {Connections={}, Weapons = weapons, WeaponCache = {}}
+	local self = {
+		Connections={}, 
+		Weapons = weapons, 
+		Viewmodels = {},
+
+		Current = 1,
+	}
+
+	for i, v in self.Weapons do
+		self.Viewmodels[i] = self:GenViewmodel(v)
+	end
+
 	self.Connections.PreRender = game:GetService("RunService").PreRender:Connect(function(deltaTimeRender)
 		self:step(deltaTimeRender)
 	end)
@@ -27,7 +38,17 @@ function gunhandler:GenViewmodel(weapon)
 end
 
 function gunhandler:step()
-	
+	local vm = self.Viewmodels[self.Current]
+
+	for i, v in self.Viewmodels do
+		if i ~= self.Current and v.Parent ~= nil then
+			v.Parent = nil
+		else
+			v.Parent = workspace.CurrentCamera
+		end
+	end
+
+	vm:PivotTo(workspace.CurrentCamera.CFrame)
 end
 
 function gunhandler:cleanup()
@@ -35,7 +56,7 @@ function gunhandler:cleanup()
 		v:Disconnect()
 	end
 	
-	for _, v in self.WeaponCache do
+	for _, v in self.Viewmodels do
 		v:Destroy()
 	end
 end
