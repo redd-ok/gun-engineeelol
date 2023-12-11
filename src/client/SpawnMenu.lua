@@ -19,7 +19,7 @@ function SpawnMenu:getUI()
 	local PrimarySize = UDim2.new(0, 350, 0, 40)
 	local PrimarySpacing = 5
 
-	for i, v in { "KE Arms KP-15" } do
+	for i, v in self.Primaries do
 		if self.Primary == nil then
 			self.Primary = v
 		end
@@ -44,7 +44,7 @@ function SpawnMenu:getUI()
 	local SecondarySize = UDim2.new(0, 350, 0, 40)
 	local SecondarySpacing = 5
 
-	for i, v in { "P320X" } do
+	for i, v in self.Secondaries do
 		if self.Secondary == nil then
 			self.Secondary = v
 		end
@@ -108,10 +108,13 @@ function SpawnMenu:getUI()
 	})
 end
 
-function SpawnMenu.new()
+function SpawnMenu.new(Primaries, Secondaries)
 	local self = setmetatable({
 		Primary = nil,
 		Secondary = nil,
+
+		Primaries = Primaries,
+		Secondaries = Secondaries,
 
 		Loop = nil,
 		OffsetCF = CFrame.new(),

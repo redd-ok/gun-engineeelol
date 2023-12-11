@@ -3,8 +3,11 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 local Weld = require(ReplicatedStorage.Shared.Weld)
+local Canim = require(ReplicatedStorage.Lib.canim) -- thank you blackshibe!!!
 
-local gunhandler = {}
+local gunhandler = {
+	Canim = Canim
+}
 
 function gunhandler.new(weapons)
 	local self = setmetatable({

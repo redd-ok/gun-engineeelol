@@ -5,7 +5,7 @@ local LogService = game:GetService("LogService")
 local Debugger = require(script.Debugger).new()
 
 local InitWeapons = require(ReplicatedStorage.Events.initweps):Client()
-local GunFramework = require(script.gunhandler)
+local GunFramework = require(script.GunFramework)
 
 LogService.MessageOut:Connect(function(message, messageType)
 	if messageType == Enum.MessageType.MessageError then
@@ -17,26 +17,38 @@ LogService.MessageOut:Connect(function(message, messageType)
 	end
 end)
 
+local Primaries, Secondaries = {}, {}
+for _, v in ReplicatedStorage.WeaponConfigs:GetChildren() do
+	local cfg = require(v)
+	if cfg.Type == "Primary" then
+		Primaries[#Primaries+1] = v.Name
+	elseif cfg.Type == "Secondary" then
+		Secondaries[#Secondaries+1] = v.Name
+	else
+		warn(v.Name.." has invalid type!")
+	end
+end
+
 local Menu = require(script.SpawnMenu)
 local handle = nil
-local gunhandle = nil
+local gunfw = nil
 
 if Players.LocalPlayer.Character then
-	handle = Menu.new()
+	handle = Menu.new(Primaries, Secondaries)
 end
 
 Players.LocalPlayer.CharacterAdded:Connect(function()
 	if handle then
 		handle = handle:cleanup()
 	end
-	if gunhandle then
-		gunhandle:cleanup()
+	if gunfw then
+		gunfw:cleanup()
 		Players.LocalPlayer.CameraMode = Enum.CameraMode.Classic
 	end
 
-	handle = Menu.new()
+	handle = Menu.new(Primaries, Secondaries)
 end)
 
 InitWeapons:On(function(weps)
-	gunhandle = GunFramework.new(weps)
+	gunfw = GunFramework.new(weps)
 end)
