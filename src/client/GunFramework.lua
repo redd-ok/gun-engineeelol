@@ -16,6 +16,8 @@ function gunfw.new(weapons)
 		Weapons = weapons, 
 		Viewmodels = {},
 
+		Animator = Canim.new(),
+
 		Current = 1,
 	}, {__index = gunfw})
 
@@ -56,7 +58,7 @@ function gunfw:GenViewmodel(weapon)
 	return vm
 end
 
-function gunfw:step()
+function gunfw:step(dt)
 	local vm = self.Viewmodels[self.Current]
 
 	for i, v in self.Viewmodels do
@@ -64,9 +66,11 @@ function gunfw:step()
 			v.Parent = nil
 		elseif i == self.Current and v.Parent ~= workspace.CurrentCamera then
 			v.Parent = workspace.CurrentCamera
+			self.Animator:assign_model(v)
 		end
 	end
 
+	self.Animator:update(dt)
 	vm:PivotTo(workspace.CurrentCamera.CFrame)
 
 	Players.LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
