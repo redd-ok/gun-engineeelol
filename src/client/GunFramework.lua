@@ -20,10 +20,8 @@ function gunfw.new(weapons)
 	}, {__index = gunfw})
 
 	for _, v in self.Weapons do
-		print(_)
 		self.Viewmodels[#self.Viewmodels+1] = self:GenViewmodel(v)
 	end
-	print(self.Viewmodels)
 
 	self.Connections.PreRender = RunService.PreRender:Connect(function(deltaTimeRender)
 		self:step(deltaTimeRender)
