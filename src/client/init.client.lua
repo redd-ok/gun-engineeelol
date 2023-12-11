@@ -20,6 +20,20 @@ end)
 local Primaries, Secondaries = {}, {}
 for _, v in ReplicatedStorage.WeaponConfigs:GetChildren() do
 	local cfg = require(v)
+	if cfg.Poses then
+		for _, k in cfg.Poses do
+			GunFramework.Canim.cache_get_keyframe_sequence(k)
+		end
+	else
+		warn(v.Name.." has no poses table!")
+	end
+	if cfg.Animations then
+		for _, k in cfg.Animations do
+			GunFramework.Canim.cache_get_keyframe_sequence(k)
+		end
+	else
+		warn(v.Name.." has no animations table!")
+	end
 	if cfg.Type == "Primary" then
 		Primaries[#Primaries+1] = v.Name
 	elseif cfg.Type == "Secondary" then
