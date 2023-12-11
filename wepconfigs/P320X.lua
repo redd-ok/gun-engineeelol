@@ -1,5 +1,5 @@
 return {
-	Ammo = 30,
+	Ammo = 17,
 
 	Type = "Secondary",
 
