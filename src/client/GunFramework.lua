@@ -1,36 +1,53 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 
 local Weld = require(ReplicatedStorage.Shared.Weld)
 local Canim = require(ReplicatedStorage.Lib.canim) -- thank you blackshibe!!!
 
-local gunhandler = {
+local gunfw = {
 	Canim = Canim
 }
 
-function gunhandler.new(weapons)
+function gunfw.new(weapons)
 	local self = setmetatable({
 		Connections={}, 
 		Weapons = weapons, 
 		Viewmodels = {},
 
 		Current = 1,
-	}, {__index = gunhandler})
+	}, {__index = gunfw})
 
-	for i, v in self.Weapons do
-		self.Viewmodels[i] = self:GenViewmodel(v)
+	for _, v in self.Weapons do
+		print(_)
+		self.Viewmodels[#self.Viewmodels+1] = self:GenViewmodel(v)
 	end
+	print(self.Viewmodels)
 
 	self.Connections.PreRender = RunService.PreRender:Connect(function(deltaTimeRender)
 		self:step(deltaTimeRender)
+	end)
+	self.Connections.InputBegan = UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+		if not gameProcessedEvent then
+			self:inputBegan(input)
+		end
 	end)
 
 	return self
 end
 
-function gunhandler:GenViewmodel(weapon)
-	local vm = ReplicatedStorage.Arms[Players.LocalPlayer.Team and Players.LocalPlayer.Team.Name or "Neutral"]
+function gunfw:inputBegan(inp: InputObject)
+	if inp.KeyCode.Value > 47 and inp.KeyCode.Value < 58 then
+		local i = inp.KeyCode.Value == 48 and 10 or inp.KeyCode.Value-48
+		if self.Viewmodels[i] then
+			self.Current = i
+		end
+	end
+end
+
+function gunfw:GenViewmodel(weapon)
+	local vm = ReplicatedStorage.Arms[Players.LocalPlayer.Team and Players.LocalPlayer.Team.Name or "Neutral"]:Clone()
 	local model = ReplicatedStorage.WeaponModels[weapon.Name]:Clone()
 
 	model.Parent = vm
@@ -41,7 +58,7 @@ function gunhandler:GenViewmodel(weapon)
 	return vm
 end
 
-function gunhandler:step()
+function gunfw:step()
 	local vm = self.Viewmodels[self.Current]
 
 	for i, v in self.Viewmodels do
@@ -57,7 +74,7 @@ function gunhandler:step()
 	Players.LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
 end
 
-function gunhandler:cleanup()
+function gunfw:cleanup()
 	for _, v in self.Connections do
 		v:Disconnect()
 	end
@@ -67,4 +84,4 @@ function gunhandler:cleanup()
 	end
 end
 
-return gunhandler
+return gunfw

@@ -1,5 +1,8 @@
 return {
 	Ammo = 30,
 
-	Type = "Primary"
+	Type = "Primary",
+
+	Poses = {},
+	Animations = {},
 }
