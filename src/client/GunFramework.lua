@@ -30,14 +30,16 @@ function gunfw.new(weapons)
 		self.Viewmodels[#self.Viewmodels+1] = self:GenViewmodel(v)
 	end
 
-	for _, v in self.Configs do
+	for i, v in self.Configs do
 		for j, k in v.Poses do
-			self.Animator:load_pose(j, v.Priorities[j], k)
+			print("loading pose "..(self.Weapons[i].Name.."_")..j)
+			self.Animator:load_pose((self.Weapons[i].Name.."_")..j, v.Priorities[j], k)
 		end
 	end
-	for _, v in self.Configs do
+	for i, v in self.Configs do
 		for j, k in v.Animations do
-			self.Animator:load_animation(j, v.Priorities[j], k)
+			print("loading anim "..(self.Weapons[i].Name.."_")..j)
+			self.Animator:load_animation((self.Weapons[i].Name.."_")..j, v.Priorities[j], k)
 		end
 	end
 
