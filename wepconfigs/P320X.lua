@@ -3,6 +3,8 @@ return {
 
 	Type = "Secondary",
 
-	Poses = {},
+	Poses = {
+		Idle = "rbxassetid://15624095237"
+	},
 	Animations = {},
 }
