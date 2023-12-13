@@ -97,7 +97,6 @@ function gunfw:inputBegan(inp: InputObject)
 			end
 		end
 	end
-	print(inp)
 	if inp.UserInputType == Enum.UserInputType.MouseButton1 then
 		self:shoot()
 	end
