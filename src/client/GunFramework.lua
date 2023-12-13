@@ -24,10 +24,13 @@ function gunfw.new(weapons)
 		Char = Player.Character,
 
 		LastCamCF = workspace.CurrentCamera.CFrame,
+		RecoilCF = CFrame.new(),
 
 		SwaySpr = Spring.new(15, 50, 2, 4),
 		BobSpr = Spring.new(8, 75, 4, 2),
 		BobSpr2 = Spring.new(8, 75, 4, 2),
+		RecoilSpr = Spring.new(15, 100, 5, 6),
+		Recoil2Spr = Spring.new(15, 100, 5, 6),
 
 		Distance = 0,
 
@@ -94,6 +97,10 @@ function gunfw:inputBegan(inp: InputObject)
 			end
 		end
 	end
+	print(inp)
+	if inp.UserInputType == Enum.UserInputType.MouseButton1 then
+		self:shoot()
+	end
 end
 
 function gunfw:GenViewmodel(weapon)
@@ -106,6 +113,14 @@ function gunfw:GenViewmodel(weapon)
 	Weld(vm.PrimaryPart, model.PrimaryPart)
 
 	return vm
+end
+
+function gunfw:shoot()
+	local A = math.random(-1,1)
+	local X = math.random(4,6) * A
+	self.RecoilSpr:shove(Vector3.new(X, 5, X))
+	self.Recoil2Spr:shove(Vector3.new(-X, -4, 15))
+	self.RecoilCF *= CFrame.Angles(math.rad(6), 0, 0) * CFrame.new(0, math.rad(-5), 0.25)
 end
 
 function gunfw:step(dt)
@@ -155,6 +170,10 @@ function gunfw:step(dt)
 	local springV = self.SwaySpr:update(dt)
 	local bobV = self.BobSpr:update(dt)
 	local bob2V = self.BobSpr2:update(dt)
+	local recoilV = self.RecoilSpr:update(dt)
+	local recoil2V = self.Recoil2Spr:update(dt)
+
+	self.RecoilCF = self.RecoilCF:Lerp(CFrame.new(), 0.25)
 
 	vm:PivotTo(
 		workspace.CurrentCamera.CFrame
@@ -162,6 +181,9 @@ function gunfw:step(dt)
 			* CFrame.Angles(math.rad(springV.Y), math.rad(springV.X), -math.rad(springV.Z * 1.5))
 			* CFrame.new(math.rad(bob2V.X) + math.rad(bob2V.Z * 1.5), -math.rad(bob2V.Y), bob2V.Z)
 			* CFrame.Angles(math.rad(bobV.Y), math.rad(bobV.X), math.rad(bobV.Z * 1.5))
+			* CFrame.Angles(math.rad(recoilV.Y), math.rad(recoilV.X), math.rad(recoilV.Z * 1.5))
+			* CFrame.new(math.rad(recoil2V.Y), math.rad(recoil2V.X), math.rad(recoil2V.Z))
+			* self.RecoilCF
 	)
 
 	Players.LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
