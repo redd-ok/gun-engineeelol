@@ -44,14 +44,12 @@ function gunfw.new(weapons)
 
 	for i, v in self.Configs do
 		for j, k in v.Poses do
-			print("loading pose " .. (self.Weapons[i].Name .. "_") .. j)
 			self.Animator:load_pose((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k).looped = false
 			-- self.Animator.animations[(self.Weapons[i].Name.."_")..j]
 		end
 	end
 	for i, v in self.Configs do
 		for j, k in v.Animations do
-			print("loading anim " .. (self.Weapons[i].Name .. "_") .. j)
 			self.Animator:load_animation((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k)
 		end
 	end
@@ -73,7 +71,6 @@ function gunfw.new(weapons)
 
 	if self.Animator.animations[self.Weapons[self.Current].Name .. "_Idle"] then
 		self.Animator:play_pose(self.Weapons[self.Current].Name .. "_Idle")
-		print("playing " .. self.Weapons[self.Current].Name .. "_Idle")
 	end
 
 	return self
@@ -89,13 +86,11 @@ function gunfw:inputBegan(inp: InputObject)
 				self.Animator:stop_animation(v.name)
 			end
 			for _, v in self.Animator.playing_poses do
-				print(v.name)
 				self.Animator:stop_animation(v.name)
 			end
 
 			if self.Animator.animations[self.Weapons[i].Name .. "_Idle"] then
 				self.Animator:play_pose(self.Weapons[i].Name .. "_Idle")
-				print("playing " .. self.Weapons[i].Name .. "_Idle")
 			end
 		end
 	end
