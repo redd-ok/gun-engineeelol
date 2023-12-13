@@ -132,9 +132,9 @@ function gunfw:step(dt)
 	if self.Char.Humanoid.MoveDirection.Magnitude > 0 then
 		local s = relVel.Magnitude / 4
 		self.BobSpr.Target = Vector3.new(
-			math.cos(self.Distance * s) * 5 + (relVel.X / 2),
-			-math.abs(math.sin(self.Distance * s) * 5) - (vel.Y / 2),
-			math.cos(self.Distance * s) * 5 + (relVel.X / 4)
+			math.cos(self.Distance * s) * 3 + (relVel.X / 2),
+			-math.abs(math.sin(self.Distance * s) * 3) - (vel.Y / 2),
+			math.cos(self.Distance * s) * 3 + (relVel.X / 4)
 		)
 		self.BobSpr2.Target = Vector3.new(
 			-math.cos(self.Distance * s) * 2 + (relVel.X / 2),
