@@ -4,6 +4,7 @@ local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 
 local Weld = require(ReplicatedStorage.Shared.Weld)
+local Spring = require(ReplicatedStorage.Shared.Spring)
 local Canim = require(script.Parent.canim) -- thank you blackshibe!!!
 
 local gunfw = {
@@ -18,6 +19,8 @@ function gunfw.new(weapons)
 		Viewmodels = {},
 
 		Animator = Canim.Canim.new(),
+
+		SwaySpr = Spring.new(15, 50, 2, 4),
 
 		Current = 1,
 	}, {__index = gunfw})
@@ -107,8 +110,14 @@ function gunfw:step(dt)
 		end
 	end
 
+	local md = UserInputService:GetMouseDelta()
+
+	self.SwaySpr.Target = Vector3.new(math.clamp(-md.X, -5, 5), math.clamp(-md.Y, -5, 5), math.clamp(-md.X, -5, 5) * 2.5)
+
 	self.Animator:update(dt)
-	vm:PivotTo(workspace.CurrentCamera.CFrame)
+
+	local springV = self.SwaySpr:update(dt)
+	vm:PivotTo(workspace.CurrentCamera.CFrame * CFrame.new(math.rad(springV.X), -math.rad(springV.Y), 0) * CFrame.Angles(math.rad(springV.Y), math.rad(springV.X), math.rad(springV.Z)))
 
 	Players.LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
 end
