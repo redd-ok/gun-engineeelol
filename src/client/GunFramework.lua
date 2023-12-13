@@ -8,42 +8,44 @@ local Spring = require(ReplicatedStorage.Shared.Spring)
 local Canim = require(script.Parent.canim) -- thank you blackshibe!!!
 
 local gunfw = {
-	Canim = Canim
+	Canim = Canim,
 }
 
 function gunfw.new(weapons)
 	local self = setmetatable({
-		Connections={}, 
-		Weapons = weapons, 
+		Connections = {},
+		Weapons = weapons,
 		Configs = {},
 		Viewmodels = {},
 
 		Animator = Canim.Canim.new(),
 
+		LastCamCF = workspace.CurrentCamera.CFrame,
+
 		SwaySpr = Spring.new(15, 50, 2, 4),
 
 		Current = 1,
-	}, {__index = gunfw})
+	}, { __index = gunfw })
 
 	for i, v in self.Weapons do
 		self.Configs[i] = require(v)
 	end
 
 	for _, v in self.Weapons do
-		self.Viewmodels[#self.Viewmodels+1] = self:GenViewmodel(v)
+		self.Viewmodels[#self.Viewmodels + 1] = self:GenViewmodel(v)
 	end
 
 	for i, v in self.Configs do
 		for j, k in v.Poses do
-			print("loading pose "..(self.Weapons[i].Name.."_")..j)
-			self.Animator:load_pose((self.Weapons[i].Name.."_")..j, v.Priorities[j], k).looped = false
+			print("loading pose " .. (self.Weapons[i].Name .. "_") .. j)
+			self.Animator:load_pose((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k).looped = false
 			-- self.Animator.animations[(self.Weapons[i].Name.."_")..j]
 		end
 	end
 	for i, v in self.Configs do
 		for j, k in v.Animations do
-			print("loading anim "..(self.Weapons[i].Name.."_")..j)
-			self.Animator:load_animation((self.Weapons[i].Name.."_")..j, v.Priorities[j], k)
+			print("loading anim " .. (self.Weapons[i].Name .. "_") .. j)
+			self.Animator:load_animation((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k)
 		end
 	end
 
@@ -56,9 +58,9 @@ function gunfw.new(weapons)
 		end
 	end)
 
-	if self.Animator.animations[self.Weapons[self.Current].Name.."_Idle"] then
-		self.Animator:play_pose(self.Weapons[self.Current].Name.."_Idle")
-		print("playing "..self.Weapons[self.Current].Name.."_Idle")
+	if self.Animator.animations[self.Weapons[self.Current].Name .. "_Idle"] then
+		self.Animator:play_pose(self.Weapons[self.Current].Name .. "_Idle")
+		print("playing " .. self.Weapons[self.Current].Name .. "_Idle")
 	end
 
 	return self
@@ -66,7 +68,7 @@ end
 
 function gunfw:inputBegan(inp: InputObject)
 	if inp.KeyCode.Value > 47 and inp.KeyCode.Value < 58 then
-		local i = inp.KeyCode.Value == 48 and 10 or inp.KeyCode.Value-48
+		local i = inp.KeyCode.Value == 48 and 10 or inp.KeyCode.Value - 48
 		if self.Viewmodels[i] then
 			self.Current = i
 
@@ -78,9 +80,9 @@ function gunfw:inputBegan(inp: InputObject)
 				self.Animator:stop_animation(v.name)
 			end
 
-			if self.Animator.animations[self.Weapons[i].Name.."_Idle"] then
-				self.Animator:play_pose(self.Weapons[i].Name.."_Idle")
-				print("playing "..self.Weapons[i].Name.."_Idle")
+			if self.Animator.animations[self.Weapons[i].Name .. "_Idle"] then
+				self.Animator:play_pose(self.Weapons[i].Name .. "_Idle")
+				print("playing " .. self.Weapons[i].Name .. "_Idle")
 			end
 		end
 	end
@@ -110,14 +112,24 @@ function gunfw:step(dt)
 		end
 	end
 
-	local md = UserInputService:GetMouseDelta()
+	local _OCX, _OCY, _OCZ = self.LastCamCF:ToOrientation()
+	local _CCX, _CCY, _CCZ = workspace.CurrentCamera.CFrame:ToOrientation()
+	local md = Vector2.new(math.deg(_OCY - _CCY), math.deg(_OCX - _CCX))
 
-	self.SwaySpr.Target = Vector3.new(math.clamp(-md.X, -5, 5), math.clamp(-md.Y, -5, 5), math.clamp(-md.X, -5, 5) * 2.5)
+	self.LastCamCF = workspace.CurrentCamera.CFrame
+
+	self.SwaySpr.Target =
+		Vector3.new(math.clamp(-md.X, -5, 5), math.clamp(-md.Y, -5, 5), math.clamp(-md.X, -5, 5))
 
 	self.Animator:update(dt)
 
 	local springV = self.SwaySpr:update(dt)
-	vm:PivotTo(workspace.CurrentCamera.CFrame * CFrame.new(math.rad(springV.X), -math.rad(springV.Y), 0) * CFrame.Angles(math.rad(springV.Y), math.rad(springV.X), math.rad(springV.Z)))
+
+	vm:PivotTo(
+		workspace.CurrentCamera.CFrame
+			* CFrame.new(math.rad(springV.X) + math.rad(springV.Z * 1.5), -math.rad(springV.Y), 0)
+			* CFrame.Angles(math.rad(springV.Y), math.rad(springV.X), -math.rad(springV.Z * 1.5))
+	)
 
 	Players.LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
 end
@@ -126,7 +138,7 @@ function gunfw:cleanup()
 	for _, v in self.Connections do
 		v:Disconnect()
 	end
-	
+
 	for _, v in self.Viewmodels do
 		v:Destroy()
 	end
