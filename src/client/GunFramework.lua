@@ -4,7 +4,7 @@ local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 
 local Weld = require(ReplicatedStorage.Shared.Weld)
-local Canim = require(ReplicatedStorage.Lib.canim) -- thank you blackshibe!!!
+local Canim = require(script.Parent.canim) -- thank you blackshibe!!!
 
 local gunfw = {
 	Canim = Canim
@@ -17,7 +17,7 @@ function gunfw.new(weapons)
 		Configs = {},
 		Viewmodels = {},
 
-		Animator = Canim.Animator.new(),
+		Animator = Canim.Canim.new(),
 
 		Current = 1,
 	}, {__index = gunfw})
@@ -33,7 +33,8 @@ function gunfw.new(weapons)
 	for i, v in self.Configs do
 		for j, k in v.Poses do
 			print("loading pose "..(self.Weapons[i].Name.."_")..j)
-			self.Animator:load_pose((self.Weapons[i].Name.."_")..j, v.Priorities[j], k)
+			self.Animator:load_pose((self.Weapons[i].Name.."_")..j, v.Priorities[j], k).looped = false
+			-- self.Animator.animations[(self.Weapons[i].Name.."_")..j]
 		end
 	end
 	for i, v in self.Configs do
@@ -52,6 +53,11 @@ function gunfw.new(weapons)
 		end
 	end)
 
+	if self.Animator.animations[self.Weapons[self.Current].Name.."_Idle"] then
+		self.Animator:play_pose(self.Weapons[self.Current].Name.."_Idle")
+		print("playing "..self.Weapons[self.Current].Name.."_Idle")
+	end
+
 	return self
 end
 
@@ -60,6 +66,19 @@ function gunfw:inputBegan(inp: InputObject)
 		local i = inp.KeyCode.Value == 48 and 10 or inp.KeyCode.Value-48
 		if self.Viewmodels[i] then
 			self.Current = i
+
+			for _, v in self.Animator.playing_animations do
+				self.Animator:stop_animation(v.name)
+			end
+			for _, v in self.Animator.playing_poses do
+				print(v.name)
+				self.Animator:stop_animation(v.name)
+			end
+
+			if self.Animator.animations[self.Weapons[i].Name.."_Idle"] then
+				self.Animator:play_pose(self.Weapons[i].Name.."_Idle")
+				print("playing "..self.Weapons[i].Name.."_Idle")
+			end
 		end
 	end
 end

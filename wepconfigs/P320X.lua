@@ -8,6 +8,6 @@ return {
 	},
 	Animations = {},
 	Priorities = {
-		Idle = 5
+		Idle = 1
 	},
 }

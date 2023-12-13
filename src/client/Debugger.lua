@@ -61,7 +61,7 @@ end
 function debugger:log(text)
 	local timeStamp = getTime()
 
-	local log = {string.format("%s [%s] ", timeStamp, "LOG")..text, Color3.fromRGB(253, 253, 253)}
+	local log = {string.format("%s [%s] ", timeStamp, "INFO")..text, Color3.fromRGB(253, 253, 253)}
 
 	table.insert(self.logs, log)
 	roact.update(self.handle, roact.createElement(Logs, self.logs))

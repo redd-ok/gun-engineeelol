@@ -3,7 +3,11 @@ return {
 
 	Type = "Primary",
 
-	Poses = {},
+	Poses = {
+		Idle = "rbxassetid://15624615256"
+	},
 	Animations = {},
-	Priorities = {},
+	Priorities = {
+		Idle = 1,
+	},
 }
