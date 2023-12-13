@@ -14,6 +14,7 @@ function gunfw.new(weapons)
 	local self = setmetatable({
 		Connections={}, 
 		Weapons = weapons, 
+		Configs = {},
 		Viewmodels = {},
 
 		Animator = Canim.Animator.new(),
@@ -21,8 +22,23 @@ function gunfw.new(weapons)
 		Current = 1,
 	}, {__index = gunfw})
 
+	for i, v in self.Weapons do
+		self.Configs[i] = require(v)
+	end
+
 	for _, v in self.Weapons do
 		self.Viewmodels[#self.Viewmodels+1] = self:GenViewmodel(v)
+	end
+
+	for _, v in self.Configs do
+		for j, k in v.Poses do
+			self.Animator:load_pose(j, v.Priorities[j], k)
+		end
+	end
+	for _, v in self.Configs do
+		for j, k in v.Animations do
+			self.Animator:load_animation(j, v.Priorities[j], k)
+		end
 	end
 
 	self.Connections.PreRender = RunService.PreRender:Connect(function(deltaTimeRender)

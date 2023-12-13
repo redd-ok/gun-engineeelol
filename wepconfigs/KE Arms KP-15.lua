@@ -5,4 +5,5 @@ return {
 
 	Poses = {},
 	Animations = {},
+	Priorities = {},
 }

@@ -7,4 +7,7 @@ return {
 		Idle = "rbxassetid://15624095237"
 	},
 	Animations = {},
+	Priorities = {
+		Idle = 5
+	},
 }
