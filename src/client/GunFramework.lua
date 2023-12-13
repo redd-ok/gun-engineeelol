@@ -16,7 +16,7 @@ function gunfw.new(weapons)
 		Weapons = weapons, 
 		Viewmodels = {},
 
-		Animator = Canim.new(),
+		Animator = Canim.Animator.new(),
 
 		Current = 1,
 	}, {__index = gunfw})
