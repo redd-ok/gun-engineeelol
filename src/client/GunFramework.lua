@@ -32,6 +32,8 @@ function gunfw.new(weapons)
 		RecoilSpr = Spring.new(15, 100, 5, 6),
 		Recoil2Spr = Spring.new(15, 100, 5, 6),
 
+		Offset = Vector2.new(),
+
 		Distance = 0,
 
 		Current = 1,
@@ -139,6 +141,10 @@ function gunfw:step(dt)
 	local md = Vector2.new(math.deg(_OCY - _CCY), math.deg(_OCX - _CCX))
 
 	self.LastCamCF = workspace.CurrentCamera.CFrame
+	self.Offset -= md / 8
+	if self.Offset.Magnitude > 6 then
+		self.Offset = self.Offset.Unit * 6
+	end
 
 	local relVel = self.Char.PrimaryPart.CFrame:VectorToObjectSpace(self.Char.PrimaryPart.AssemblyLinearVelocity)
 	local vel = self.Char.PrimaryPart.AssemblyLinearVelocity
@@ -177,6 +183,7 @@ function gunfw:step(dt)
 	vm:PivotTo(
 		workspace.CurrentCamera.CFrame
 			* CFrame.new(math.rad(springV.X) + math.rad(springV.Z * 1.5), -math.rad(springV.Y), 0)
+			* CFrame.Angles(math.rad(self.Offset.Y), math.rad(self.Offset.X), -math.rad(self.Offset.X * 1.5))
 			* CFrame.Angles(math.rad(springV.Y), math.rad(springV.X), -math.rad(springV.Z * 1.5))
 			* CFrame.new(math.rad(bob2V.X) + math.rad(bob2V.Z * 1.5), -math.rad(bob2V.Y), bob2V.Z)
 			* CFrame.Angles(math.rad(bobV.Y), math.rad(bobV.X), math.rad(bobV.Z * 1.5))
