@@ -152,6 +152,7 @@ end
 
 function gunfw:step(dt)
 	local vm: Model = self.Viewmodels[self.Current]
+	local cfg = self.Configs[self.Current]
 
 	for i, v in self.Viewmodels do
 		if i ~= self.Current and v.Parent ~= nil then
@@ -207,7 +208,7 @@ function gunfw:step(dt)
 	local recoil2V = self.Recoil2Spr:update(dt)
 	local offsetV = self.OffsetSpr:update(dt)
 
-	self.RecoilCF = self.RecoilCF:Lerp(CFrame.new(), 0.25)
+	self.RecoilCF = self.RecoilCF:Lerp(CFrame.new(), cfg.Recover)
 
 	local aimOffset = CFrame.new()
 	local gun = vm:FindFirstChildWhichIsA("Model")
