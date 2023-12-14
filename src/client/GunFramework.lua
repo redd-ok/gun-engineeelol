@@ -141,7 +141,7 @@ function gunfw:shoot()
 	local Z = math.random(math.floor(cfg.Recoil.Z*0.8), math.floor(cfg.Recoil.Z*1.2)) * A
 	self.RecoilSpr:shove(Vector3.new(X, cfg.Recoil.Y, Z))
 	self.Recoil2Spr:shove(Vector3.new(-X, -cfg.Recoil.Y*0.6, 15))
-	self.RecoilCF *= CFrame.Angles(math.rad(cfg.Recoil.Y*1.4), X*.4, Z*.4) * CFrame.new(-X*.4, math.rad(-cfg.Recoil.Y*0.4), cfg.Punch)
+	self.RecoilCF *= CFrame.Angles(math.rad(cfg.Recoil.Y*1.4), math.rad(X*.4), math.rad(Z*.4)) * CFrame.new(math.rad(-X*.4), math.rad(-cfg.Recoil.Y*0.4), cfg.Punch)
 	self.FOVSpr.Velocity += cfg.FOVPunch
 end
 

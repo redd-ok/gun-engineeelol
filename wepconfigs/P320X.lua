@@ -5,7 +5,7 @@ return {
 
 	Recoil = Vector3.new(9, 25, 9),
 	Punch = 1.2,
-	FOVPunch = 7,
+	FOVPunch = 24,
 
 	Poses = {
 		Idle = "rbxassetid://15624095237"
