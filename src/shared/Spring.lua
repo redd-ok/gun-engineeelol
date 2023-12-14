@@ -11,11 +11,11 @@ local SPRING	= {}
 
 -- Functions 
 
-function SPRING.new(mass, force, damping, speed)
+function SPRING.new(mass, force, damping, speed, default)
 	local spring	= setmetatable({
-		Target		= Vector3.new();
-		Position	= Vector3.new();
-		Velocity	= Vector3.new();
+		Target		= default or Vector3.new();
+		Position	= default or Vector3.new();
+		Velocity	= default or Vector3.new();
 		
 		Mass		= mass or 5;
 		Force		= force or 50;

@@ -25,56 +25,66 @@ function gunfw.new(weapons)
 
 		LastLook = Vector2.new(),
 		RecoilCF = CFrame.new(),
+		AimCF = CFrame.new(),
 
 		SwaySpr = Spring.new(15, 50, 2, 4),
-		BobSpr = Spring.new(8, 75, 4, 2),
-		BobSpr2 = Spring.new(8, 75, 4, 2),
+		BobSpr = Spring.new(15, 75, 4, 2),
+		BobSpr2 = Spring.new(15, 75, 4, 2),
 		RecoilSpr = Spring.new(15, 100, 5, 6),
 		Recoil2Spr = Spring.new(15, 100, 5, 6),
-		OffsetSpr = Spring.new(8, 75, 4, 2),
+		OffsetSpr = Spring.new(15, 75, 4, 2),
+		AimSpr = Spring.new(15, 45, 5, 5, 0),
+
+		Aimming = false,
 
 		Distance = 0,
-
 		Current = 1,
 	}, { __index = gunfw })
 
-	for i, v in self.Weapons do
-		self.Configs[i] = require(v)
-	end
-
-	for _, v in self.Weapons do
-		self.Viewmodels[#self.Viewmodels + 1] = self:GenViewmodel(v)
-	end
-
-	for i, v in self.Configs do
-		for j, k in v.Poses do
-			self.Animator:load_pose((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k).looped = false
-			-- self.Animator.animations[(self.Weapons[i].Name.."_")..j]
+	do
+		for i, v in self.Weapons do
+			self.Configs[i] = require(v)
 		end
-	end
-	for i, v in self.Configs do
-		for j, k in v.Animations do
-			self.Animator:load_animation((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k)
-		end
-	end
 
-	self.Connections.PreRender = RunService.PreRender:Connect(function(deltaTimeRender)
-		self:step(deltaTimeRender)
-	end)
-	self.Connections.InputBegan = UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
-		if not gameProcessedEvent then
-			self:inputBegan(input)
+		for _, v in self.Weapons do
+			self.Viewmodels[#self.Viewmodels + 1] = self:GenViewmodel(v)
 		end
-	end)
-	-- self.Connections.StateChanged = self.Char.Humanoid.StateChanged:Connect(function(_, new)
-	-- 	if new == Enum.HumanoidStateType.Landed then
-	-- 		self.BobSpr:shove(Vector3.new(0, math.rad(-50), 0))
-	-- 		self.BobSpr2:shove(Vector3.new(0, math.rad(-50), 0))
-	-- 	end
-	-- end)
 
-	if self.Animator.animations[self.Weapons[self.Current].Name .. "_Idle"] then
-		self.Animator:play_pose(self.Weapons[self.Current].Name .. "_Idle")
+		for i, v in self.Configs do
+			for j, k in v.Poses do
+				self.Animator:load_pose((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k).looped = false
+				-- self.Animator.animations[(self.Weapons[i].Name.."_")..j]
+			end
+		end
+		for i, v in self.Configs do
+			for j, k in v.Animations do
+				self.Animator:load_animation((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k)
+			end
+		end
+
+		self.Connections.PreRender = RunService.PreRender:Connect(function(deltaTimeRender)
+			self:step(deltaTimeRender)
+		end)
+		self.Connections.InputBegan = UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+			if not gameProcessedEvent then
+				self:inputBegan(input)
+			end
+		end)
+		self.Connections.InputEnded = UserInputService.InputEnded:Connect(function(input, gameProcessedEvent)
+			if not gameProcessedEvent then
+				self:inputEnded(input)
+			end
+		end)
+		-- self.Connections.StateChanged = self.Char.Humanoid.StateChanged:Connect(function(_, new)
+		-- 	if new == Enum.HumanoidStateType.Landed then
+		-- 		self.BobSpr:shove(Vector3.new(0, math.rad(-50), 0))
+		-- 		self.BobSpr2:shove(Vector3.new(0, math.rad(-50), 0))
+		-- 	end
+		-- end)
+
+		if self.Animator.animations[self.Weapons[self.Current].Name .. "_Idle"] then
+			self.Animator:play_pose(self.Weapons[self.Current].Name .. "_Idle")
+		end
 	end
 
 	return self
@@ -100,6 +110,14 @@ function gunfw:inputBegan(inp: InputObject)
 	end
 	if inp.UserInputType == Enum.UserInputType.MouseButton1 then
 		self:shoot()
+	elseif inp.UserInputType == Enum.UserInputType.MouseButton2 then
+		self.Aimming = true
+	end
+end
+
+function gunfw:inputEnded(inp: InputObject)
+	if inp.UserInputType == Enum.UserInputType.MouseButton2 then
+		self.Aimming = false
 	end
 end
 
@@ -116,15 +134,15 @@ function gunfw:GenViewmodel(weapon)
 end
 
 function gunfw:shoot()
-	local A = math.random(-1,1)
-	local X = math.random(4,6) * A
+	local A = math.random(-1, 1)
+	local X = math.random(4, 6) * A
 	self.RecoilSpr:shove(Vector3.new(X, 5, X))
 	self.Recoil2Spr:shove(Vector3.new(-X, -4, 15))
 	self.RecoilCF *= CFrame.Angles(math.rad(6), 0, 0) * CFrame.new(0, math.rad(-5), 0.25)
 end
 
 function gunfw:step(dt)
-	local vm = self.Viewmodels[self.Current]
+	local vm: Model = self.Viewmodels[self.Current]
 
 	for i, v in self.Viewmodels do
 		if i ~= self.Current and v.Parent ~= nil then
@@ -155,7 +173,8 @@ function gunfw:step(dt)
 		self.BobSpr2.Target = Vector3.new(
 			-math.cos(self.Distance * s) * 2 + (relVel.X / 2),
 			-math.abs(math.sin(self.Distance * s) * 2) - (vel.Y / 7),
-			UserInputService:IsKeyDown(Enum.KeyCode.W) and 0.1 or (UserInputService:IsKeyDown(Enum.KeyCode.S) and -0.1 or 0)
+			UserInputService:IsKeyDown(Enum.KeyCode.W) and 0.1
+				or (UserInputService:IsKeyDown(Enum.KeyCode.S) and -0.1 or 0)
 		)
 		self.Distance += dt
 	else
@@ -177,6 +196,16 @@ function gunfw:step(dt)
 
 	self.RecoilCF = self.RecoilCF:Lerp(CFrame.new(), 0.25)
 
+	local aimOffset = CFrame.new()
+	local gun = vm:FindFirstChildWhichIsA("Model")
+	if gun:FindFirstChild("Aim1") then
+		local Weight = 1
+		self.AimCF = self.AimCF:Lerp(gun.Aim1.CFrame:ToObjectSpace(vm.PrimaryPart.CFrame), dt / (Weight * 0.1))
+		local a = self.AimSpr:update(dt)
+		aimOffset *= aimOffset:Lerp(self.AimCF, a)
+		self.AimSpr.Target = self.Aimming and 1 or 0
+	end
+
 	vm:PivotTo(
 		workspace.CurrentCamera.CFrame
 			* CFrame.new(math.rad(springV.X) + math.rad(springV.Z * 1.5), -math.rad(springV.Y), 0)
@@ -187,6 +216,7 @@ function gunfw:step(dt)
 			* CFrame.Angles(math.rad(recoilV.Y), math.rad(recoilV.X), math.rad(recoilV.Z * 1.5))
 			* CFrame.new(math.rad(recoil2V.Y), math.rad(recoil2V.X), math.rad(recoil2V.Z))
 			* self.RecoilCF
+			* aimOffset
 	)
 
 	Players.LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
