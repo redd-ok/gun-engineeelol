@@ -3,8 +3,8 @@ return {
 
 	Type = "Primary",
 
-	Recoil = Vector3.new(5, 10, 5),
-	Punch = 0.2,
+	Recoil = Vector3.new(7, 4, 7),
+	Punch = 0.4,
 	FOVPunch = 4,
 
 	Poses = {
