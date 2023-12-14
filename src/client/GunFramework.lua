@@ -135,10 +135,13 @@ end
 
 function gunfw:shoot()
 	local A = math.random(-1, 1)
-	local X = math.random(4, 6) * A
-	self.RecoilSpr:shove(Vector3.new(X, 5, X))
-	self.Recoil2Spr:shove(Vector3.new(-X, -4, 15))
-	self.RecoilCF *= CFrame.Angles(math.rad(6), 0, 0) * CFrame.new(0, math.rad(-5), 0.25)
+	local cfg = self.Configs[self.Current]
+	local X = math.random(math.floor(cfg.Recoil.X*0.8), math.floor(cfg.Recoil.X*1.2)) * A
+	local Z = math.random(math.floor(cfg.Recoil.Z*0.8), math.floor(cfg.Recoil.Z*1.2)) * A
+	self.RecoilSpr:shove(Vector3.new(X, cfg.Recoil.Y, Z))
+	self.Recoil2Spr:shove(Vector3.new(-X, -cfg.Recoil.Y*0.8, 15))
+	self.RecoilCF *= CFrame.Angles(math.rad(cfg.Recoil.Y*1.2), 0, 0) * CFrame.new(0, math.rad(-cfg.Recoil.Y), cfg.Punch)
+	workspace.CurrentCamera.FieldOfView -= cfg.FOVPunch
 end
 
 function gunfw:step(dt)
