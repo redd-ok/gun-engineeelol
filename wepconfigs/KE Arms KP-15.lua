@@ -3,9 +3,10 @@ return {
 
 	Type = "Primary",
 
-	Recoil = Vector3.new(7, 4, 7),
+	Recoil = Vector3.new(1, 2, 1),
 	Punch = 0.4,
 	FOVPunch = 10,
+	Recover = 0.1,
 
 	Poses = {
 		Idle = "rbxassetid://15624615256"
