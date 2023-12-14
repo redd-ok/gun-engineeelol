@@ -23,7 +23,7 @@ function gunfw.new(weapons)
 		Animator = Canim.Canim.new(),
 		Char = Player.Character,
 
-		LastCamCF = workspace.CurrentCamera.CFrame,
+		LastLook = Vector2.new(),
 		RecoilCF = CFrame.new(),
 
 		SwaySpr = Spring.new(15, 50, 2, 4),
@@ -31,8 +31,7 @@ function gunfw.new(weapons)
 		BobSpr2 = Spring.new(8, 75, 4, 2),
 		RecoilSpr = Spring.new(15, 100, 5, 6),
 		Recoil2Spr = Spring.new(15, 100, 5, 6),
-
-		Offset = Vector2.new(),
+		OffsetSpr = Spring.new(8, 75, 4, 2),
 
 		Distance = 0,
 
@@ -136,14 +135,11 @@ function gunfw:step(dt)
 		end
 	end
 
-	local _OCX, _OCY, _OCZ = self.LastCamCF:ToOrientation()
-	local _CCX, _CCY, _CCZ = workspace.CurrentCamera.CFrame:ToOrientation()
-	local md = Vector2.new(math.deg(_OCY - _CCY), math.deg(_OCX - _CCX))
+	local md = UserInputService:GetMouseDelta()
 
-	self.LastCamCF = workspace.CurrentCamera.CFrame
-	self.Offset -= md / 8
-	if self.Offset.Magnitude > 6 then
-		self.Offset = self.Offset.Unit * 6
+	self.OffsetSpr.Target -= Vector3.new(md.X, md.Y) / 8
+	if self.OffsetSpr.Target.Magnitude > 6 then
+		self.OffsetSpr.Target = self.OffsetSpr.Target.Unit * 6
 	end
 
 	local relVel = self.Char.PrimaryPart.CFrame:VectorToObjectSpace(self.Char.PrimaryPart.AssemblyLinearVelocity)
@@ -177,13 +173,14 @@ function gunfw:step(dt)
 	local bob2V = self.BobSpr2:update(dt)
 	local recoilV = self.RecoilSpr:update(dt)
 	local recoil2V = self.Recoil2Spr:update(dt)
+	local offsetV = self.OffsetSpr:update(dt)
 
 	self.RecoilCF = self.RecoilCF:Lerp(CFrame.new(), 0.25)
 
 	vm:PivotTo(
 		workspace.CurrentCamera.CFrame
 			* CFrame.new(math.rad(springV.X) + math.rad(springV.Z * 1.5), -math.rad(springV.Y), 0)
-			* CFrame.Angles(math.rad(self.Offset.Y), math.rad(self.Offset.X), -math.rad(self.Offset.X * 1.5))
+			* CFrame.Angles(math.rad(offsetV.Y), math.rad(offsetV.X), -math.rad(offsetV.X * 1.5))
 			* CFrame.Angles(math.rad(springV.Y), math.rad(springV.X), -math.rad(springV.Z * 1.5))
 			* CFrame.new(math.rad(bob2V.X) + math.rad(bob2V.Z * 1.5), -math.rad(bob2V.Y), bob2V.Z)
 			* CFrame.Angles(math.rad(bobV.Y), math.rad(bobV.X), math.rad(bobV.Z * 1.5))
