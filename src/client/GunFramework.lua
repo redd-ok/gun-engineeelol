@@ -28,11 +28,11 @@ function gunfw.new(weapons)
 		AimCF = CFrame.new(),
 
 		SwaySpr = Spring.new(15, 50, 2, 4),
-		BobSpr = Spring.new(15, 75, 4, 2),
-		BobSpr2 = Spring.new(15, 75, 4, 2),
+		BobSpr = Spring.new(15, 85, 4, 4),
+		BobSpr2 = Spring.new(15, 85, 4, 4),
 		RecoilSpr = Spring.new(15, 100, 5, 6),
 		Recoil2Spr = Spring.new(15, 100, 5, 6),
-		OffsetSpr = Spring.new(15, 75, 4, 2),
+		OffsetSpr = Spring.new(15, 125, 2, 4),
 		AimSpr = Spring.new(15, 75, 5, 8, 0),
 		FOVSpr = Spring.new(15, 125, 4, 3, 80),
 
@@ -180,12 +180,12 @@ function gunfw:step(dt)
 	if self.Char.Humanoid.MoveDirection.Magnitude > 0 then
 		local s = relVel.Magnitude / 4
 		self.BobSpr.Target = Vector3.new(
-			math.sin(self.Distance * s) * (3+(s/4)) + (relVel.X / 6),
+			math.sin(self.Distance * s) * (1+(s/4)) + (relVel.X / 6),
 			-(math.abs((math.cos(self.Distance * s)) * 3) - (0.5/(2/4))) * (s/4) - (vel.Y / 2),
 			math.cos(self.Distance * s) * (3+(s/4)) + (relVel.X / 3)
 		)
 		self.BobSpr2.Target = Vector3.new(
-			-math.sin(self.Distance * s) * (3+(s/4)) + (relVel.X / 6),
+			-math.sin(self.Distance * s) * (1+(s/4)) + (relVel.X / 6),
 			(math.abs((math.cos(self.Distance * s)) * 2) - (0.5/(2/4))) * (s/4) - (vel.Y / 7),
 			UserInputService:IsKeyDown(Enum.KeyCode.W) and 0.1
 				or (UserInputService:IsKeyDown(Enum.KeyCode.S) and -0.1 or 0)
