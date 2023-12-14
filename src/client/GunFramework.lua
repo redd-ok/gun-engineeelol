@@ -33,7 +33,7 @@ function gunfw.new(weapons)
 		RecoilSpr = Spring.new(15, 100, 5, 6),
 		Recoil2Spr = Spring.new(15, 100, 5, 6),
 		OffsetSpr = Spring.new(15, 75, 4, 2),
-		AimSpr = Spring.new(15, 45, 5, 5, 0),
+		AimSpr = Spring.new(15, 75, 5, 8, 0),
 
 		Aimming = false,
 
@@ -155,7 +155,11 @@ function gunfw:step(dt)
 
 	local md = UserInputService:GetMouseDelta()
 
-	self.OffsetSpr.Target -= Vector3.new(md.X, md.Y) / 8
+	if not self.Aimming then
+		self.OffsetSpr.Target -= Vector3.new(md.X, md.Y) / 8
+	else
+		self.OffsetSpr.Target = Vector3.new()
+	end
 	if self.OffsetSpr.Target.Magnitude > 6 then
 		self.OffsetSpr.Target = self.OffsetSpr.Target.Unit * 6
 	end
