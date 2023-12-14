@@ -34,6 +34,7 @@ function gunfw.new(weapons)
 		Recoil2Spr = Spring.new(15, 100, 5, 6),
 		OffsetSpr = Spring.new(15, 75, 4, 2),
 		AimSpr = Spring.new(15, 75, 5, 8, 0),
+		FOVSpr = Spring.new(15, 125, 4, 3, 80),
 
 		Aimming = false,
 
@@ -139,9 +140,9 @@ function gunfw:shoot()
 	local X = math.random(math.floor(cfg.Recoil.X*0.8), math.floor(cfg.Recoil.X*1.2)) * A
 	local Z = math.random(math.floor(cfg.Recoil.Z*0.8), math.floor(cfg.Recoil.Z*1.2)) * A
 	self.RecoilSpr:shove(Vector3.new(X, cfg.Recoil.Y, Z))
-	self.Recoil2Spr:shove(Vector3.new(-X, -cfg.Recoil.Y*0.8, 15))
-	self.RecoilCF *= CFrame.Angles(math.rad(cfg.Recoil.Y*1.2), 0, 0) * CFrame.new(0, math.rad(-cfg.Recoil.Y), cfg.Punch)
-	workspace.CurrentCamera.FieldOfView -= cfg.FOVPunch
+	self.Recoil2Spr:shove(Vector3.new(-X, -cfg.Recoil.Y*0.6, 15))
+	self.RecoilCF *= CFrame.Angles(math.rad(cfg.Recoil.Y*1.4), 0, 0) * CFrame.new(0, math.rad(-cfg.Recoil.Y*0.4), cfg.Punch)
+	self.FOVSpr.Velocity += cfg.FOVPunch
 end
 
 function gunfw:step(dt)
@@ -212,6 +213,8 @@ function gunfw:step(dt)
 		aimOffset *= aimOffset:Lerp(self.AimCF, a)
 		self.AimSpr.Target = self.Aimming and 1 or 0
 	end
+
+	workspace.CurrentCamera.FieldOfView = self.FOVSpr:update(dt)
 
 	vm:PivotTo(
 		workspace.CurrentCamera.CFrame

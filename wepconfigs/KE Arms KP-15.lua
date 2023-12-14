@@ -4,7 +4,7 @@ return {
 	Type = "Primary",
 
 	Recoil = Vector3.new(5, 10, 5),
-	Punch = 1.5,
+	Punch = 0.2,
 	FOVPunch = 4,
 
 	Poses = {
