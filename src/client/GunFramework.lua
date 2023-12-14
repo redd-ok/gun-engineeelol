@@ -37,6 +37,7 @@ function gunfw.new(weapons)
 		FOVSpr = Spring.new(15, 125, 4, 3, 80),
 
 		Aimming = false,
+		Sprinting = false,
 
 		Distance = 0,
 		Current = 1,
@@ -113,12 +114,16 @@ function gunfw:inputBegan(inp: InputObject)
 		self:shoot()
 	elseif inp.UserInputType == Enum.UserInputType.MouseButton2 then
 		self.Aimming = true
+	elseif inp.KeyCode == Enum.KeyCode.LeftShift then
+		self.Sprinting = true
 	end
 end
 
 function gunfw:inputEnded(inp: InputObject)
 	if inp.UserInputType == Enum.UserInputType.MouseButton2 then
 		self.Aimming = false
+	elseif inp.KeyCode == Enum.KeyCode.LeftShift then
+		self.Sprinting = false
 	end
 end
 
@@ -174,13 +179,13 @@ function gunfw:step(dt)
 	if self.Char.Humanoid.MoveDirection.Magnitude > 0 then
 		local s = relVel.Magnitude / 4
 		self.BobSpr.Target = Vector3.new(
-			math.cos(self.Distance * s) * 3 + (relVel.X / 2),
-			-math.abs(math.sin(self.Distance * s) * 3) - (vel.Y / 2),
-			math.cos(self.Distance * s) * 3 + (relVel.X / 4)
+			math.sin(self.Distance * s) * (3+(s/4)) + (relVel.X / 6),
+			-(math.abs((math.cos(self.Distance * s)) * 3) - (0.5/(2/4))) * (s/4) - (vel.Y / 2),
+			math.cos(self.Distance * s) * (3+(s/4)) + (relVel.X / 3)
 		)
 		self.BobSpr2.Target = Vector3.new(
-			-math.cos(self.Distance * s) * 2 + (relVel.X / 2),
-			-math.abs(math.sin(self.Distance * s) * 2) - (vel.Y / 7),
+			-math.sin(self.Distance * s) * (3+(s/4)) + (relVel.X / 6),
+			(math.abs((math.cos(self.Distance * s)) * 2) - (0.5/(2/4))) * (s/4) - (vel.Y / 7),
 			UserInputService:IsKeyDown(Enum.KeyCode.W) and 0.1
 				or (UserInputService:IsKeyDown(Enum.KeyCode.S) and -0.1 or 0)
 		)
@@ -229,6 +234,7 @@ function gunfw:step(dt)
 			* aimOffset
 	)
 
+	self.Char.Humanoid.WalkSpeed = self.Char.Humanoid.WalkSpeed + ((self.Sprinting and 18 or 12)- self.Char.Humanoid.WalkSpeed) * 0.3
 	Players.LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
 end
 
