@@ -179,17 +179,17 @@ function gunfw:step(dt)
 
 	if self.Char.Humanoid.MoveDirection.Magnitude > 0 then
 		local s = relVel.Magnitude / 4
-		self.BobSpr.Target = Vector3.new(
+		self.BobSpr.Target = self.BobSpr.Target:Lerp(Vector3.new(
 			math.sin(self.Distance * s) * (1+(s/4)) + (relVel.X / 6),
 			-(math.abs((math.cos(self.Distance * s)) * 3) - (0.5/(2/4))) * (s/4) - (vel.Y / 2),
-			math.cos(self.Distance * s) * (3+(s/4)) + (relVel.X / 3)
-		)
-		self.BobSpr2.Target = Vector3.new(
+			math.cos(self.Distance * s) * (2+(s/4)) + (relVel.X / 4)
+		), 0.3)
+		self.BobSpr2.Target = self.BobSpr2.Target:Lerp(Vector3.new(
 			-math.sin(self.Distance * s) * (1+(s/4)) + (relVel.X / 6),
 			(math.abs((math.cos(self.Distance * s)) * 2) - (0.5/(2/4))) * (s/4) - (vel.Y / 7),
 			UserInputService:IsKeyDown(Enum.KeyCode.W) and 0.1
 				or (UserInputService:IsKeyDown(Enum.KeyCode.S) and -0.1 or 0)
-		)
+		), 0.3)
 		self.Distance += dt
 	else
 		self.BobSpr.Target = Vector3.new(0, -(vel.Y / 2), 0)
@@ -222,17 +222,19 @@ function gunfw:step(dt)
 
 	workspace.CurrentCamera.FieldOfView = self.FOVSpr:update(dt)
 
+	local PivotTo = workspace.CurrentCamera.CFrame
+	PivotTo *= CFrame.new(math.rad(springV.X) + math.rad(springV.Z * 1.5), -math.rad(springV.Y), 0)
+	PivotTo *= CFrame.Angles(math.rad(offsetV.Y), math.rad(offsetV.X), -math.rad(offsetV.X * 1.5))
+	PivotTo *= CFrame.Angles(math.rad(springV.Y), math.rad(springV.X), -math.rad(springV.Z * 1.5))
+	PivotTo *= CFrame.new(math.rad(bob2V.X) + math.rad(bob2V.Z * 1.5), -math.rad(bob2V.Y), bob2V.Z)
+	PivotTo *= CFrame.Angles(math.rad(bobV.Y), math.rad(bobV.X), math.rad(bobV.Z * 1.5))
+	PivotTo *= CFrame.Angles(math.rad(recoilV.Y), math.rad(recoilV.X), math.rad(recoilV.Z * 1.5))
+	PivotTo *= CFrame.new(math.rad(recoil2V.Y), math.rad(recoil2V.X), math.rad(recoil2V.Z))
+	PivotTo *= self.RecoilCF
+	PivotTo *= aimOffset
+
 	vm:PivotTo(
-		workspace.CurrentCamera.CFrame
-			* CFrame.new(math.rad(springV.X) + math.rad(springV.Z * 1.5), -math.rad(springV.Y), 0)
-			* CFrame.Angles(math.rad(offsetV.Y), math.rad(offsetV.X), -math.rad(offsetV.X * 1.5))
-			* CFrame.Angles(math.rad(springV.Y), math.rad(springV.X), -math.rad(springV.Z * 1.5))
-			* CFrame.new(math.rad(bob2V.X) + math.rad(bob2V.Z * 1.5), -math.rad(bob2V.Y), bob2V.Z)
-			* CFrame.Angles(math.rad(bobV.Y), math.rad(bobV.X), math.rad(bobV.Z * 1.5))
-			* CFrame.Angles(math.rad(recoilV.Y), math.rad(recoilV.X), math.rad(recoilV.Z * 1.5))
-			* CFrame.new(math.rad(recoil2V.Y), math.rad(recoil2V.X), math.rad(recoil2V.Z))
-			* self.RecoilCF
-			* aimOffset
+		PivotTo
 	)
 
 	self.Char.Humanoid.WalkSpeed = self.Char.Humanoid.WalkSpeed + ((self.Sprinting and 18 or 12)- self.Char.Humanoid.WalkSpeed) * 0.3
