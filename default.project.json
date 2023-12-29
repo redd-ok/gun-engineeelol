@@ -42,7 +42,8 @@
         "Arms": {"$path": "assets/arms"},
         "WeaponModels": {"$path": "assets/weapons"},
         "WeaponConfigs": {"$path": "wepconfigs"},
-        "Events": {"$path": "events"}
+        "Events": {"$path": "events"},
+        "WeaponAttachments": {"$path": "assets/attachments"}
     },
 
     "ServerScriptService": {
