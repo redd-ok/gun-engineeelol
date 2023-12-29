@@ -3,6 +3,8 @@ return {
 
 	Type = "Secondary",
 
+	Mass = 15,
+
 	Recoil = Vector3.new(9, 25, 9),
 	Punch = 1.2,
 	FOVPunch = 24,

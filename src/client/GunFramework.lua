@@ -48,6 +48,12 @@ function gunfw.new(weapons)
 			self.Configs[i] = require(v)
 		end
 
+		for j, v in self do
+			if typeof(j) == "string" and j:sub(-3) == "Spr" then
+				v.Mass = self.Configs[self.Current].Mass
+			end
+		end
+
 		for _, v in self.Weapons do
 			self.Viewmodels[#self.Viewmodels + 1] = self:GenViewmodel(v)
 		end
@@ -97,6 +103,12 @@ function gunfw:inputBegan(inp: InputObject)
 		local i = inp.KeyCode.Value == 48 and 10 or inp.KeyCode.Value - 48
 		if self.Viewmodels[i] then
 			self.Current = i
+
+			for j, v in self do
+				if typeof(j) == "string" and j:sub(-3) == "Spr" then
+					v.Mass = self.Configs[self.Current].Mass
+				end
+			end
 
 			for _, v in self.Animator.playing_animations do
 				self.Animator:stop_animation(v.name)
@@ -216,7 +228,7 @@ function gunfw:step(dt)
 		local Weight = 1
 		self.AimCF = self.AimCF:Lerp(gun.Aim1.CFrame:ToObjectSpace(vm.PrimaryPart.CFrame), dt / (Weight * 0.1))
 		local a = self.AimSpr:update(dt)
-		aimOffset *= aimOffset:Lerp(self.AimCF, a)
+		aimOffset *= aimOffset:Lerp(self.AimCF, a) * CFrame.new(0, 0, (a<0.5 and -a or (a-1))*0.3)
 		self.AimSpr.Target = self.Aimming and 1 or 0
 	end
 
