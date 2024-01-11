@@ -257,7 +257,12 @@ function gunfw:step(dt)
 	PivotTo *= CFrame.new(math.rad(bob2V.X) + math.rad(bob2V.Z * 1.5), -math.rad(bob2V.Y), bob2V.Z)
 	PivotTo *= CFrame.Angles(math.rad(bobV.Y), math.rad(bobV.X), math.rad(bobV.Z * 1.5))
 	PivotTo *= CFrame.new(0,0,-0.5)
-	
+	PivotTo *= CFrame.Angles(math.rad(recoilV.Y), math.rad(recoilV.X), math.rad(recoilV.Z * 1.5))
+	PivotTo *= CFrame.new(math.rad(recoil2V.Y), math.rad(recoil2V.X), math.rad(recoil2V.Z))
+	PivotTo *= self.RecoilCF
+	PivotTo *= CFrame.new(0,0,0.5)
+	PivotTo *= aimOffset
+
 	vm:PivotTo(
 		PivotTo
 	)
