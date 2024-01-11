@@ -68,14 +68,11 @@ function gunfw.new(weapons)
 		for i, v in self.Configs do
 			for j, k in v.Poses do
 				self.Animator:load_pose((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k).looped = false
-				-- self.Animator.animations[(self.Weapons[i].Name.."_")..j]
 			end
 		end
 		for i, v in self.Configs do
 			for j, k in v.Animations do
-				local anim = self.Animator:load_animation((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k)
-				anim.rebase_basis = self.Animator.animations[self.Weapons[i].Name.."_Idle"]
-				anim.rebase_target = self.Animator.animations[self.Weapons[i].Name.."_Idle"]
+				self.Animator:load_animation((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k)
 			end
 		end
 
