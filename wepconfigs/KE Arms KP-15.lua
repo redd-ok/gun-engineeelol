@@ -11,7 +11,7 @@ return {
 	VMOffset = CFrame.new(0, -0.1, 0);
 
 	Recoil = Vector3.new(1, 1.5, 1.5),
-	Punch = 0.5,
+	Punch = 0.2,
 	FOVPunch = 10,
 	Recover = 0.2,
 
@@ -35,5 +35,6 @@ return {
 		Equip = 2,
 		Unequip = 2,
 		EmptyReload = 2,
+		Shoot = 2,
 	},
 }

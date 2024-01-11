@@ -143,16 +143,13 @@ function gunfw:equip(num)
 end
 
 function gunfw:inputBegan(inp: InputObject)
-	if not self.Ready then
-		return
-	end
-	if inp.KeyCode.Value > 47 and inp.KeyCode.Value < 58 then
+	if inp.KeyCode.Value > 47 and inp.KeyCode.Value < 58 and self.Ready then
 		local i = inp.KeyCode.Value == 48 and 10 or inp.KeyCode.Value - 48
 		if self.Viewmodels[i] then
 			self:equip(i)
 		end
 	end
-	if inp.UserInputType == Enum.UserInputType.MouseButton1 then
+	if inp.UserInputType == Enum.UserInputType.MouseButton1 and self.Ready then
 		local cfg = self.Configs[self.Current]
 		while cfg.Ammo > 0 and self.Ready and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
 			if not self.ShootDelay then
@@ -171,15 +168,12 @@ function gunfw:inputBegan(inp: InputObject)
 		self.Aimming = true
 	elseif inp.KeyCode == Enum.KeyCode.LeftShift then
 		self.Sprinting = true
-	elseif inp.KeyCode == Enum.KeyCode.R then
+	elseif inp.KeyCode == Enum.KeyCode.R and self.Ready then
 		self:reload()
 	end
 end
 
 function gunfw:inputEnded(inp: InputObject)
-	if not self.Ready then
-		return
-	end
 	if inp.UserInputType == Enum.UserInputType.MouseButton2 then
 		self.Aimming = false
 	elseif inp.KeyCode == Enum.KeyCode.LeftShift then
@@ -213,6 +207,7 @@ function gunfw:shoot()
 		cfg.Punch
 	)
 	self.FOVSpr.Velocity += cfg.FOVPunch
+	self.Animator:play_animation(self.Weapons[self.Current].Name .. "_Shoot")
 end
 
 function gunfw:reload()
