@@ -99,15 +99,20 @@ function gunfw.new(weapons)
 		-- 	end
 		-- end)
 
-		if self.Animator.animations[self.Weapons[self.Current].Name .. "_Idle"] then
-			self.Animator:play_pose(self.Weapons[self.Current].Name .. "_Idle")
-		end
+		self.Animator:play_pose(self.Weapons[self.Current].Name .. "_Equip")
+		self.Animator[self.Weapons[self.Current].Name .. "_Equip"].finished:Wait()
+		self.Ready = true
+		self.Animator:play_pose(self.Weapons[self.Current].Name .. "_Idle")
 	end
 
 	return self
 end
 
 function gunfw:equip(num)
+	self.Ready = false
+	self.Animator:play_pose(self.Weapons[self.Current].Name .. "_Unequip")
+	self.Animator[self.Weapons[self.Current].Name .. "_Unequip"].finished:Wait()
+
 	self.Current = num
 
 	for j, v in self do
@@ -123,7 +128,10 @@ function gunfw:equip(num)
 		self.Animator:stop_animation(v.name)
 	end
 
-	self.Animator:play_pose(self.Weapons[num].Name .. "_Idle")
+	self.Animator:play_pose(self.Weapons[self.Current].Name .. "_Equip")
+	self.Animator[self.Weapons[self.Current].Name .. "_Equip"].finished:Wait()
+	self.Ready = true
+	self.Animator:play_pose(self.Weapons[self.Current].Name .. "_Idle")
 end
 
 function gunfw:inputBegan(inp: InputObject)
