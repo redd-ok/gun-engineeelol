@@ -76,6 +76,13 @@ function gunfw.new(weapons)
 			for j, k in v.Animations do
 				self.Animator:load_animation((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k)--.rebase_target =
 					--self.Animator.animations[self.Weapons[i].Name .. "_Idle"]
+				if j == "Reload" then
+					local track = self.Animator.animations[self.Weapons[i].Name .. "_" .. j]
+					track.speed = track.length / v.ReloadTime
+				elseif j == "EmptyReload" then
+					local track = self.Animator.animations[self.Weapons[i].Name .. "_" .. j]
+					track.speed = track.length / v.EmptyReloadTime
+				end
 			end
 		end
 
@@ -195,7 +202,25 @@ function gunfw:shoot()
 end
 
 function gunfw:reload()
-	self.Animator:play_animation(self.Weapons[self.Current].Name .. "_Reload")
+	self.Ready = false
+
+	local cfg = self.Configs[self.Current]
+
+	if cfg.Ammo > 0 then
+		self.Animator:play_animation(self.Weapons[self.Current].Name .. "_Reload")
+		self.Animator.animations[self.Weapons[self.Current].Name .. "_Reload"].finished:Wait()
+
+		cfg.Ammo = cfg.MaxAmmo + 1
+
+		self.Ready = true
+	else
+		self.Animator:play_animation(self.Weapons[self.Current].Name .. "_EmptyReload")
+		self.Animator.animations[self.Weapons[self.Current].Name .. "_EmptyReload"].finished:Wait()
+
+		cfg.Ammo = cfg.MaxAmmo
+
+		self.Ready = true
+	end
 end
 
 function gunfw:step(dt)
