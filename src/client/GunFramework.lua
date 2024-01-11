@@ -55,6 +55,12 @@ function gunfw.new(weapons)
 			end
 		end
 
+		for j, v in self do
+			if typeof(j) == "string" and j:sub(-3) == "Spr" then
+				v.Mass = self.Configs[self.Current].Mass
+			end
+		end
+
 		for _, v in self.Weapons do
 			self.Viewmodels[#self.Viewmodels + 1] = self:GenViewmodel(v)
 		end
