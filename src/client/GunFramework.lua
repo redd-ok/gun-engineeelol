@@ -74,10 +74,8 @@ function gunfw.new(weapons)
 		for i, v in self.Configs do
 			for j, k in v.Animations do
 				local anim = self.Animator:load_animation((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k)
-				anim.finished_loading:Connect(function()
-					anim.rebase_basis = self.Animator.animations[self.Weapons[i].Name.."_Idle"]
-					anim.rebase_target = self.Animator.animations[self.Weapons[i].Name.."_Idle"]
-				end)
+				anim.rebase_basis = self.Animator.animations[self.Weapons[i].Name.."_Idle"]
+				anim.rebase_target = self.Animator.animations[self.Weapons[i].Name.."_Idle"]
 			end
 		end
 
@@ -137,6 +135,8 @@ function gunfw:inputBegan(inp: InputObject)
 		self.Aimming = true
 	elseif inp.KeyCode == Enum.KeyCode.LeftShift then
 		self.Sprinting = true
+	elseif inp.KeyCode == Enum.KeyCode.R then
+		self:reload()
 	end
 end
 
@@ -173,7 +173,7 @@ function gunfw:shoot()
 end
 
 function gunfw:reload()
-	
+	self.Animator:play_animation(self.Weapons[self.Current].Name .. "_Reload")
 end
 
 function gunfw:step(dt)

@@ -13,8 +13,13 @@ return {
 	Poses = {
 		Idle = "rbxassetid://15624615256"
 	},
-	Animations = {},
+	Animations = {
+		Reload = "rbxassetid://15945535805",
+		-- EmptyReload = "",
+
+	},
 	Priorities = {
 		Idle = 1,
+		Reload = 2,
 	},
 }
