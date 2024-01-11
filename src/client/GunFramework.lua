@@ -249,19 +249,15 @@ function gunfw:step(dt)
 	workspace.CurrentCamera.FieldOfView = self.FOVSpr:update(dt)
 
 	local PivotTo = workspace.CurrentCamera.CFrame
-	PivotTo *= CFrame.new(-math.rad(springV.X), -math.rad(springV.Y), 0)
-	PivotTo *= CFrame.Angles(0, math.rad(springV.X), math.rad(springV.X * 1.5)) * CFrame.Angles(math.rad(springV.Y), 0, 0)
-	PivotTo *= CFrame.new(0, math.rad(offsetV.Y), 0) * CFrame.new(math.rad(offsetV.X), 0, 0)
-	PivotTo *= CFrame.Angles(0, math.rad(offsetV.X), -math.rad(offsetV.X * 1.5)) * CFrame.Angles(math.rad(offsetV.Y), 0, 0)
+	PivotTo *= CFrame.new(math.rad(springV.X) + math.rad(springV.Z * 1.5), -math.rad(springV.Y), 0)
+	PivotTo *= CFrame.new(0,0,-2)
+	PivotTo *= CFrame.Angles(math.rad(offsetV.Y), math.rad(offsetV.X), -math.rad(offsetV.X * 1.5))
+	PivotTo *= CFrame.new(0,0,2)
+	PivotTo *= CFrame.Angles(math.rad(springV.Y), math.rad(springV.X), -math.rad(springV.Z * 1.5))
 	PivotTo *= CFrame.new(math.rad(bob2V.X) + math.rad(bob2V.Z * 1.5), -math.rad(bob2V.Y), bob2V.Z)
 	PivotTo *= CFrame.Angles(math.rad(bobV.Y), math.rad(bobV.X), math.rad(bobV.Z * 1.5))
 	PivotTo *= CFrame.new(0,0,-0.5)
-	PivotTo *= CFrame.Angles(math.rad(recoilV.Y), math.rad(recoilV.X), math.rad(recoilV.Z * 1.5))
-	PivotTo *= CFrame.new(math.rad(recoil2V.Y), math.rad(recoil2V.X), math.rad(recoil2V.Z))
-	PivotTo *= self.RecoilCF
-	PivotTo *= CFrame.new(0,0,0.5)
-	PivotTo *= aimOffset
-
+	
 	vm:PivotTo(
 		PivotTo
 	)
