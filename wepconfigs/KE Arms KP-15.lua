@@ -1,7 +1,10 @@
 return {
 	Ammo = 30,
+	RPM = 800,
 
 	Type = "Primary",
+
+	Firemode = "Auto",
 
 	Mass = 25,
 

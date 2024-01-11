@@ -21,6 +21,7 @@ function gunfw.new(weapons)
 		Viewmodels = {},
 
 		Ready = false,
+		ShootDelay = false,
 
 		Animator = Canim.Canim.new(),
 		Char = Player.Character,
@@ -74,8 +75,8 @@ function gunfw.new(weapons)
 		end
 		for i, v in self.Configs do
 			for j, k in v.Animations do
-				self.Animator:load_animation((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k)--.rebase_target =
-					--self.Animator.animations[self.Weapons[i].Name .. "_Idle"]
+				self.Animator:load_animation((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k) --.rebase_target =
+				--self.Animator.animations[self.Weapons[i].Name .. "_Idle"]
 				if j == "Reload" then
 					local track = self.Animator.animations[self.Weapons[i].Name .. "_" .. j]
 					track.speed = track.length / v.ReloadTime
@@ -152,7 +153,20 @@ function gunfw:inputBegan(inp: InputObject)
 		end
 	end
 	if inp.UserInputType == Enum.UserInputType.MouseButton1 then
-		self:shoot()
+		local cfg = self.Configs[self.Current]
+		while cfg.Ammo > 0 and self.Ready and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
+			if not self.ShootDelay then
+				self.ShootDelay = true
+				
+				self:shoot()
+
+				task.wait(60 / cfg.RPM)
+				self.ShootDelay = false
+			end
+			if self.Firemode ~= "Auto" then
+				break
+			end
+		end
 	elseif inp.UserInputType == Enum.UserInputType.MouseButton2 then
 		self.Aimming = true
 	elseif inp.KeyCode == Enum.KeyCode.LeftShift then
@@ -293,7 +307,10 @@ function gunfw:step(dt)
 	local gun = vm:FindFirstChildWhichIsA("Model")
 	if gun:FindFirstChild("Aim1") then
 		local Weight = 1
-		self.AimCF = self.AimCF:Lerp(gun.Aim1.CFrame:ToObjectSpace(vm.PrimaryPart.CFrame * cfg.VMOffset:Inverse()), dt / (Weight * 0.1))
+		self.AimCF = self.AimCF:Lerp(
+			gun.Aim1.CFrame:ToObjectSpace(vm.PrimaryPart.CFrame * cfg.VMOffset:Inverse()),
+			dt / (Weight * 0.1)
+		)
 		local a = self.AimSpr:update(dt)
 		aimOffset *= aimOffset:Lerp(self.AimCF, a) * CFrame.new(0, 0, (a < 0.5 and -a or (a - 1)) * 0.3)
 		self.AimSpr.Target = self.Aimming and 1 or 0
