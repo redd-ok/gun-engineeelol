@@ -17,11 +17,15 @@ return {
 	},
 	Animations = {
 		Reload = "rbxassetid://15945535805",
+		Equip = "rbxassetid://15946075946",
+		Unequip = "rbxassetid://15946073154",
 		-- EmptyReload = "",
 
 	},
 	Priorities = {
 		Idle = 1,
 		Reload = 2,
+		Equip = 2,
+		Unequip = 2,
 	},
 }
