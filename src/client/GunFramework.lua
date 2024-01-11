@@ -268,7 +268,7 @@ function gunfw:step(dt)
 	local gun = vm:FindFirstChildWhichIsA("Model")
 	if gun:FindFirstChild("Aim1") then
 		local Weight = 1
-		self.AimCF = self.AimCF:Lerp(gun.Aim1.CFrame:ToObjectSpace(vm.PrimaryPart.CFrame), dt / (Weight * 0.1))
+		self.AimCF = self.AimCF:Lerp(gun.Aim1.CFrame:ToObjectSpace(vm.PrimaryPart.CFrame * cfg.VMOffset:Inverse()), dt / (Weight * 0.1))
 		local a = self.AimSpr:update(dt)
 		aimOffset *= aimOffset:Lerp(self.AimCF, a) * CFrame.new(0, 0, (a < 0.5 and -a or (a - 1)) * 0.3)
 		self.AimSpr.Target = self.Aimming and 1 or 0
