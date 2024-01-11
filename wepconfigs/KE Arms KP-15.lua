@@ -3,7 +3,9 @@ return {
 
 	Type = "Primary",
 
-	Recoil = Vector3.new(1, 1, 1),
+	Mass = 25,
+
+	Recoil = Vector3.new(1, 1.5, 1.5),
 	Punch = 0.5,
 	FOVPunch = 10,
 	Recover = 0.2,
