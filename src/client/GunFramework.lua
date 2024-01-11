@@ -27,12 +27,12 @@ function gunfw.new(weapons)
 		RecoilCF = CFrame.new(),
 		AimCF = CFrame.new(),
 
-		SwaySpr = Spring.new(15, 50, 2, 4),
+		SwaySpr = Spring.new(15, 85, 2, 5),
 		BobSpr = Spring.new(15, 85, 4, 4),
 		BobSpr2 = Spring.new(15, 85, 4, 4),
 		RecoilSpr = Spring.new(15, 100, 5, 6),
 		Recoil2Spr = Spring.new(15, 100, 5, 6),
-		OffsetSpr = Spring.new(15, 125, 2, 4),
+		OffsetSpr = Spring.new(15, 125, 2, 5),
 		AimSpr = Spring.new(15, 75, 5, 8, 0),
 		FOVSpr = Spring.new(15, 125, 4, 3, 80),
 
@@ -46,6 +46,19 @@ function gunfw.new(weapons)
 	do
 		for i, v in self.Weapons do
 			self.Configs[i] = require(v)
+			self.Configs[i].MaxAmmo = self.Configs[i].Ammo
+		end
+
+		for j, v in self do
+			if typeof(j) == "string" and j:sub(-3) == "Spr" then
+				v.Mass = self.Configs[self.Current].Mass
+			end
+		end
+
+		for j, v in self do
+			if typeof(j) == "string" and j:sub(-3) == "Spr" then
+				v.Mass = self.Configs[self.Current].Mass
+			end
 		end
 
 		for _, v in self.Weapons do
@@ -60,7 +73,11 @@ function gunfw.new(weapons)
 		end
 		for i, v in self.Configs do
 			for j, k in v.Animations do
-				self.Animator:load_animation((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k)
+				local anim = self.Animator:load_animation((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k)
+				anim.finished_loading:Connect(function()
+					anim.rebase_basis = self.Animator.animations[self.Weapons[i].Name.."_Idle"]
+					anim.rebase_target = self.Animator.animations[self.Weapons[i].Name.."_Idle"]
+				end)
 			end
 		end
 
@@ -98,6 +115,12 @@ function gunfw:inputBegan(inp: InputObject)
 		if self.Viewmodels[i] then
 			self.Current = i
 
+			for j, v in self do
+				if typeof(j) == "string" and j:sub(-3) == "Spr" then
+					v.Mass = self.Configs[self.Current].Mass
+				end
+			end
+
 			for _, v in self.Animator.playing_animations do
 				self.Animator:stop_animation(v.name)
 			end
@@ -105,9 +128,7 @@ function gunfw:inputBegan(inp: InputObject)
 				self.Animator:stop_animation(v.name)
 			end
 
-			if self.Animator.animations[self.Weapons[i].Name .. "_Idle"] then
-				self.Animator:play_pose(self.Weapons[i].Name .. "_Idle")
-			end
+			self.Animator:play_pose(self.Weapons[i].Name .. "_Idle")
 		end
 	end
 	if inp.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -142,12 +163,17 @@ end
 function gunfw:shoot()
 	local A = math.random(-1, 1)
 	local cfg = self.Configs[self.Current]
+	cfg.Ammo -= 1
 	local X = math.random(math.floor(cfg.Recoil.X*0.8), math.floor(cfg.Recoil.X*1.2)) * A
 	local Z = math.random(math.floor(cfg.Recoil.Z*0.8), math.floor(cfg.Recoil.Z*1.2)) * A
 	self.RecoilSpr:shove(Vector3.new(X, cfg.Recoil.Y, Z))
 	self.Recoil2Spr:shove(Vector3.new(-X, -cfg.Recoil.Y*0.6, 15))
 	self.RecoilCF *= CFrame.Angles(math.rad(cfg.Recoil.Y*1.4), math.rad(X*.4), math.rad(Z*.4)) * CFrame.new(math.rad(-X*.4), math.rad(-cfg.Recoil.Y*0.4), cfg.Punch)
 	self.FOVSpr.Velocity += cfg.FOVPunch
+end
+
+function gunfw:reload()
+	
 end
 
 function gunfw:step(dt)
@@ -216,18 +242,17 @@ function gunfw:step(dt)
 		local Weight = 1
 		self.AimCF = self.AimCF:Lerp(gun.Aim1.CFrame:ToObjectSpace(vm.PrimaryPart.CFrame), dt / (Weight * 0.1))
 		local a = self.AimSpr:update(dt)
-		aimOffset *= aimOffset:Lerp(self.AimCF, a)
+		aimOffset *= aimOffset:Lerp(self.AimCF, a) * CFrame.new(0, 0, (a<0.5 and -a or (a-1))*0.3)
 		self.AimSpr.Target = self.Aimming and 1 or 0
 	end
 
 	workspace.CurrentCamera.FieldOfView = self.FOVSpr:update(dt)
 
 	local PivotTo = workspace.CurrentCamera.CFrame
-	PivotTo *= CFrame.new(math.rad(springV.X) + math.rad(springV.Z * 1.5), -math.rad(springV.Y), 0)
-	PivotTo *= CFrame.new(0,0,-2)
-	PivotTo *= CFrame.Angles(math.rad(offsetV.Y), math.rad(offsetV.X), -math.rad(offsetV.X * 1.5))
-	PivotTo *= CFrame.new(0,0,2)
-	PivotTo *= CFrame.Angles(math.rad(springV.Y), math.rad(springV.X), -math.rad(springV.Z * 1.5))
+	PivotTo *= CFrame.new(-math.rad(springV.X), -math.rad(springV.Y), 0)
+	PivotTo *= CFrame.Angles(0, math.rad(springV.X), math.rad(springV.X * 1.5)) * CFrame.Angles(math.rad(springV.Y), 0, 0)
+	PivotTo *= CFrame.new(0, math.rad(offsetV.Y), 0) * CFrame.new(math.rad(offsetV.X), 0, 0)
+	PivotTo *= CFrame.Angles(0, math.rad(offsetV.X), -math.rad(offsetV.X * 1.5)) * CFrame.Angles(math.rad(offsetV.Y), 0, 0)
 	PivotTo *= CFrame.new(math.rad(bob2V.X) + math.rad(bob2V.Z * 1.5), -math.rad(bob2V.Y), bob2V.Z)
 	PivotTo *= CFrame.Angles(math.rad(bobV.Y), math.rad(bobV.X), math.rad(bobV.Z * 1.5))
 	PivotTo *= CFrame.new(0,0,-0.5)
