@@ -5,6 +5,8 @@ return {
 
 	Mass = 15,
 
+	VMOffset = CFrame.new(0, -0, 0);
+
 	Recoil = Vector3.new(9, 25, 9),
 	Punch = 1.2,
 	FOVPunch = 24,

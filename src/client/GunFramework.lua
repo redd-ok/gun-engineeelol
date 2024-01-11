@@ -74,8 +74,8 @@ function gunfw.new(weapons)
 		end
 		for i, v in self.Configs do
 			for j, k in v.Animations do
-				self.Animator:load_animation((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k).rebase_target =
-					self.Animator.animations[self.Weapons[i].Name .. "_Idle"]
+				self.Animator:load_animation((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k)--.rebase_target =
+					--self.Animator.animations[self.Weapons[i].Name .. "_Idle"]
 			end
 		end
 
@@ -276,7 +276,7 @@ function gunfw:step(dt)
 
 	workspace.CurrentCamera.FieldOfView = self.FOVSpr:update(dt)
 
-	local PivotTo = workspace.CurrentCamera.CFrame
+	local PivotTo = workspace.CurrentCamera.CFrame * cfg.VMOffset
 	PivotTo *= CFrame.new(math.rad(springV.X) + math.rad(springV.Z * 1.5), -math.rad(springV.Y), 0)
 	PivotTo *= CFrame.new(math.rad(offsetV.X) + math.rad(offsetV.Z * 1.5), -math.rad(offsetV.Y), 0)
 	PivotTo *= CFrame.new(0, 0, -1)
