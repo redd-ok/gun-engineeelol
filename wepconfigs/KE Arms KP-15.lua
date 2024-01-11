@@ -36,5 +36,6 @@ return {
 		Unequip = 2,
 		EmptyReload = 2,
 		Shoot = 2,
+		Sprint = 1,
 	},
 }

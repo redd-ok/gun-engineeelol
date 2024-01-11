@@ -84,6 +84,11 @@ function gunfw.new(weapons)
 					local track = self.Animator.animations[self.Weapons[i].Name .. "_" .. j]
 					track.speed = track.length / v.EmptyReloadTime
 				end
+
+				if j ~= "Equip" and j ~= "Unequip" then
+					local track = self.Animator.animations[self.Weapons[i].Name .. "_" .. j]
+					track.rebase_target = self.Animator.animations[self.Weapons[i].Name .. "_Idle"]
+				end
 			end
 		end
 
@@ -168,7 +173,9 @@ function gunfw:inputBegan(inp: InputObject)
 		self.Aimming = true
 	elseif inp.KeyCode == Enum.KeyCode.LeftShift then
 		self.Sprinting = true
-	elseif inp.KeyCode == Enum.KeyCode.R and self.Ready then
+		self.Animator:stop_animation(self.Weapons[self.Current].Name .. "_Idle")
+		self.Animator:play_pose(self.Weapons[self.Current].Name .. "_Sprint")
+	elseif inp.KeyCode == Enum.KeyCode.R and self.Ready and not self.Sprinting then
 		self:reload()
 	end
 end
@@ -178,6 +185,8 @@ function gunfw:inputEnded(inp: InputObject)
 		self.Aimming = false
 	elseif inp.KeyCode == Enum.KeyCode.LeftShift then
 		self.Sprinting = false
+		self.Animator:play_pose(self.Weapons[self.Current].Name .. "_Idle")
+		self.Animator:stop_animation(self.Weapons[self.Current].Name .. "_Sprint")
 	end
 end
 
