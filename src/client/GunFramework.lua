@@ -157,13 +157,13 @@ function gunfw:inputBegan(inp: InputObject)
 		while cfg.Ammo > 0 and self.Ready and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
 			if not self.ShootDelay then
 				self.ShootDelay = true
-				
+
 				self:shoot()
 
 				task.wait(60 / cfg.RPM)
 				self.ShootDelay = false
 			end
-			if self.Firemode ~= "Auto" then
+			if cfg.Firemode ~= "Auto" then
 				break
 			end
 		end
