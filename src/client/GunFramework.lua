@@ -294,7 +294,7 @@ function gunfw:step(dt)
 		self.Distance = 0
 	end
 
-	self.SwaySpr.Target = Vector3.new(math.clamp(-md.X, -5, 5), math.clamp(-md.Y, -5, 5), math.clamp(-md.X, -5, 5))
+	self.SwaySpr.Target = Vector3.new(math.clamp(-md.X, -2, 2)/2, math.clamp(-md.Y, -2, 2)/2, math.clamp(-md.X, -4, 4)/2)
 
 	self.Animator:update(dt)
 
@@ -303,7 +303,7 @@ function gunfw:step(dt)
 	local bob2V = self.BobSpr2:update(dt)
 	local recoilV = self.RecoilSpr:update(dt)
 	local recoil2V = self.Recoil2Spr:update(dt)
-	local offsetV = self.OffsetSpr:update(dt)
+	local offsetV = self.OffsetSpr:update(dt) / 2
 
 	self.RecoilCF = self.RecoilCF:Lerp(CFrame.new(), cfg.Recover)
 
@@ -323,12 +323,12 @@ function gunfw:step(dt)
 	workspace.CurrentCamera.FieldOfView = self.FOVSpr:update(dt)
 
 	local PivotTo = workspace.CurrentCamera.CFrame * cfg.VMOffset
-	PivotTo *= CFrame.new(math.rad(springV.X) + math.rad(springV.Z * 1.5), -math.rad(springV.Y), 0)
-	PivotTo *= CFrame.new(math.rad(offsetV.X) + math.rad(offsetV.Z * 1.5), -math.rad(offsetV.Y), 0)
+	PivotTo *= CFrame.new(math.rad(springV.X * 1.5), -math.rad(springV.Y * 2.5), 0)
+	PivotTo *= CFrame.new(math.rad(offsetV.X) + math.rad(offsetV.Z * 1.5), -math.rad(offsetV.Y * 3), 0)
 	PivotTo *= CFrame.new(0, 0, -1)
 	PivotTo *= CFrame.Angles(math.rad(offsetV.Y), math.rad(offsetV.X), -math.rad(offsetV.X * 1.5))
 	PivotTo *= CFrame.new(0, 0, 1)
-	PivotTo *= CFrame.Angles(math.rad(springV.Y), math.rad(springV.X), -math.rad(springV.Z * 1.5))
+	PivotTo *= CFrame.Angles(math.rad(springV.Y), math.rad(springV.X), math.rad(springV.X * 1.5)) * CFrame.new(math.rad(springV.X), 0, 0)
 	PivotTo *= CFrame.new(math.rad(bob2V.X) + math.rad(bob2V.Z * 1.5), -math.rad(bob2V.Y), bob2V.Z)
 	PivotTo *= CFrame.Angles(math.rad(bobV.Y), math.rad(bobV.X), math.rad(bobV.Z * 1.5))
 	PivotTo *= CFrame.new(0, 0, -0.5)
