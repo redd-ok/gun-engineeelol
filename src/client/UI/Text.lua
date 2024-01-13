@@ -27,6 +27,12 @@ function Text:render()
 		FontFace = Font.new("rbxassetid://12187365364"),
 		TextSize = self.state.textsize,
 		BorderSizePixel = 0,
+	}, {
+		Roact.createElement("UIStroke", {
+			ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+			Color = Color3.fromRGB(102, 102, 102),
+			Thickness = 2,
+		})
 	})
 end
 
