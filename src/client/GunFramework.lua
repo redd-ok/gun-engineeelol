@@ -127,7 +127,7 @@ end
 function gunfw:equip(num)
 	self.Ready = false
 	self.Animator:play_animation(self.Weapons[self.Current].Name .. "_Unequip")
-	self.Animator.animations[self.Weapons[self.Current].Name .. "_Unequip"].finished:Wait()
+	task.wait(self.Animator.animations[self.Weapons[self.Current].Name .. "_Unequip"].length)
 
 	self.Current = num
 
