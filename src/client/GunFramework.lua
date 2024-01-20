@@ -174,7 +174,7 @@ function gunfw:inputBegan(inp: InputObject)
 		end
 	elseif inp.UserInputType == Enum.UserInputType.MouseButton2 then
 		self.Aimming = true
-	elseif inp.KeyCode == Enum.KeyCode.LeftShift then
+	elseif inp.KeyCode == Enum.KeyCode.LeftShift and self.Ready then
 		self.Sprinting = true
 		self.Animator:stop_animation(self.Weapons[self.Current].Name .. "_Idle")
 		self.Animator:play_pose(self.Weapons[self.Current].Name .. "_Sprint")
@@ -186,7 +186,7 @@ end
 function gunfw:inputEnded(inp: InputObject)
 	if inp.UserInputType == Enum.UserInputType.MouseButton2 then
 		self.Aimming = false
-	elseif inp.KeyCode == Enum.KeyCode.LeftShift then
+	elseif inp.KeyCode == Enum.KeyCode.LeftShift and self.Sprinting then
 		self.Sprinting = false
 		self.Animator:play_pose(self.Weapons[self.Current].Name .. "_Idle")
 		self.Animator:stop_animation(self.Weapons[self.Current].Name .. "_Sprint")
