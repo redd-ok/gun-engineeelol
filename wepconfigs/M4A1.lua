@@ -19,10 +19,6 @@ return {
 	EmptyReloadTime = 4.3,
 
 	Bones = {
-		["Left Arm"] = {
-			{1.5, -0.1, 0},
-			{0, 0, 0}
-		}
 	},
 
 	Poses = {

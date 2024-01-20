@@ -1,11 +1,14 @@
 return {
 	Ammo = 17,
+	RPM = 700,
 
 	Type = "Secondary",
 
+	Firemode = "Semi",
+
 	Mass = 15,
 
-	VMOffset = CFrame.new(0, -0, 0);
+	VMOffset = CFrame.new(0, -0.2, 0);
 
 	Recoil = Vector3.new(9, 25, 9),
 	Punch = 1.2,
@@ -14,6 +17,8 @@ return {
 
 	ReloadTime = 3,
 	EmptyReloadTime = 4.3,
+
+	Bones = {},
 
 	Poses = {
 		Idle = "rbxassetid://16051405068",
