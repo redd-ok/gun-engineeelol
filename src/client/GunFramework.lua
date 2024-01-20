@@ -71,6 +71,9 @@ function gunfw.new(weapons)
 		for i, v in self.Configs do
 			for j, k in v.Poses do
 				self.Animator:load_pose((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k).looped = false
+				local pose = self.Animator.animations[self.Weapons[i].Name .. "_" .. j]
+
+				pose.bone_weights = v.Bones
 			end
 		end
 		for i, v in self.Configs do
@@ -85,10 +88,10 @@ function gunfw.new(weapons)
 					track.speed = track.length / v.EmptyReloadTime
 				end
 
-				if j ~= "Equip" and j ~= "Unequip" then
+				-- if j ~= "Equip" and j ~= "Unequip" then
 					local track = self.Animator.animations[self.Weapons[i].Name .. "_" .. j]
 					track.rebase_target = self.Animator.animations[self.Weapons[i].Name .. "_Idle"]
-				end
+				-- end
 			end
 		end
 

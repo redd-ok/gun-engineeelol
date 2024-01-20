@@ -18,6 +18,8 @@ return {
 	ReloadTime = 3,
 	EmptyReloadTime = 4.3,
 
+	Bones = {},
+
 	Poses = {
 		Idle = "rbxassetid://15624615256",
 		Sprint = "rbxassetid://15946193728"

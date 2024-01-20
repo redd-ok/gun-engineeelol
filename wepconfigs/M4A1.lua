@@ -8,7 +8,7 @@ return {
 
 	Mass = 25,
 
-	VMOffset = CFrame.new(0, -0.1, 0);
+	VMOffset = CFrame.new(-0.1, -0.1, 0);
 
 	Recoil = Vector3.new(1, 1.5, 1.5),
 	Punch = 0.2,
@@ -17,6 +17,13 @@ return {
 
 	ReloadTime = 3,
 	EmptyReloadTime = 4.3,
+
+	Bones = {
+		["Left Arm"] = {
+			{1.5, -0.1, 0},
+			{0, 0, 0}
+		}
+	},
 
 	Poses = {
 		Idle = "rbxassetid://15624615256",
