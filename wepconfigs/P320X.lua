@@ -12,6 +12,9 @@ return {
 	FOVPunch = 24,
 	Recover = 0.25,
 
+	ReloadTime = 3,
+	EmptyReloadTime = 4.3,
+
 	Poses = {
 		Idle = "rbxassetid://16051405068",
 		Sprint = "rbxassetid://16051409535"
