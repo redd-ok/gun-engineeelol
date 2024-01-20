@@ -13,15 +13,15 @@ return {
 	Recover = 0.25,
 
 	Poses = {
-		Idle = "rbxassetid://15624615256",
-		Sprint = "rbxassetid://15946193728"
+		Idle = "rbxassetid://16051405068",
+		Sprint = "rbxassetid://16051409535"
 	},
 	Animations = {
-		Reload = "rbxassetid://15945535805",
+		Reload = "rbxassetid://16051407412",
 		Equip = "rbxassetid://16051379556",
-		Unequip = "rbxassetid://15946073154",
-		EmptyReload = "rbxassetid://15946188230",
-		Shoot = "rbxassetid://15946191467"
+		Unequip = "rbxassetid://16051412527",
+		EmptyReload = "rbxassetid://16051399889",
+		Shoot = "rbxassetid://16051402773"
 	},
 	Priorities = {
 		Idle = 1,
