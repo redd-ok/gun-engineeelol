@@ -319,7 +319,7 @@ function gunfw:step(dt)
 			dt / (Weight * 0.1)
 		)
 		local a = self.AimSpr:update(dt)
-		aimOffset *= aimOffset:Lerp(self.AimCF, a) * CFrame.new(0, 0, (a < 0.5 and -a or (a - 1)) * 0.3)
+		aimOffset = CFrame.new():Lerp(self.AimCF, a) * CFrame.new(0, 0, (a < 0.5 and -a or (a - 1)) * 0.3)
 		self.AimSpr.Target = self.Aimming and 1 or 0
 	end
 

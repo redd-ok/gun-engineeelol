@@ -3,7 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 
-local UI = script.Parent.UI
+local UI = script.Parent
 local Text = require(UI.Text)
 local Button = require(UI.Button)
 
