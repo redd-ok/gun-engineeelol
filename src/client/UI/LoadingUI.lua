@@ -1,12 +1,13 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+ReplicatedStorage:WaitForChild("Lib"):WaitForChild("roact")
+
 local UI = script.Parent
 local Text = require(UI.Text)
 local Background = require(UI.Background)
 
 local SpawnMenu = {}
-
 local Roact = require(ReplicatedStorage.Lib.roact)
 
 

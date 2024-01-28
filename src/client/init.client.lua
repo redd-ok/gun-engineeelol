@@ -1,13 +1,17 @@
 local Players = game:GetService("Players")
+local ReplicatedFirst = game:GetService("ReplicatedFirst")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LogService = game:GetService("LogService")
 
+ReplicatedFirst:RemoveDefaultLoadingScreen()
+
+local LoadingUi = require(script.UI.LoadingUI):new()
 local Debugger = require(script.Debugger).new()
+
+Players.LocalPlayer.CharacterAdded:Wait()
 
 local InitWeapons = require(ReplicatedStorage.Events.initweps):Client()
 local GunFramework = require(script.GunFramework)
-
-local LoadingUi = require(script.UI.LoadingUI):new()
 
 LogService.MessageOut:Connect(function(message, messageType)
 	if messageType == Enum.MessageType.MessageError then
@@ -44,6 +48,7 @@ for _, v in ReplicatedStorage.WeaponConfigs:GetChildren() do
 		warn(v.Name.." has invalid type!")
 	end
 end
+print("Loaded!")
 
 LoadingUi:cleanup()
 
@@ -51,9 +56,7 @@ local Menu = require(script.UI.SpawnMenu)
 local handle = nil
 local gunfw = nil
 
-if Players.LocalPlayer.Character then
-	handle = Menu.new(Primaries, Secondaries)
-end
+handle = Menu.new(Primaries, Secondaries)
 
 Players.LocalPlayer.CharacterAdded:Connect(function()
 	if handle then
