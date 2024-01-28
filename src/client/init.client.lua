@@ -7,6 +7,8 @@ local Debugger = require(script.Debugger).new()
 local InitWeapons = require(ReplicatedStorage.Events.initweps):Client()
 local GunFramework = require(script.GunFramework)
 
+local LoadingUi = require(script.UI.LoadingUI):new()
+
 LogService.MessageOut:Connect(function(message, messageType)
 	if messageType == Enum.MessageType.MessageError then
 		Debugger:error(message)
@@ -43,7 +45,9 @@ for _, v in ReplicatedStorage.WeaponConfigs:GetChildren() do
 	end
 end
 
-local Menu = require(script.SpawnMenu)
+LoadingUi:cleanup()
+
+local Menu = require(script.UI.SpawnMenu)
 local handle = nil
 local gunfw = nil
 

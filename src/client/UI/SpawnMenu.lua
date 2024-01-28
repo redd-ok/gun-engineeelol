@@ -13,7 +13,7 @@ local Roact = require(ReplicatedStorage.Lib.roact)
 
 local Deploy = require(ReplicatedStorage.Events.deploy):Client()
 
-function SpawnMenu:getUI()
+function SpawnMenu:render()
 	local Primaries = {}
 	local PrimaryStartPos = UDim2.new(0, 5, 0, 80)
 	local PrimarySize = UDim2.new(0, 350, 0, 40)
@@ -71,6 +71,8 @@ function SpawnMenu:getUI()
 			size = UDim2.new(1, 0, 0, 48),
 
 			textsize = 24,
+
+			bg = true,
 		}),
 
 		Primary = Roact.createElement(Text, {
@@ -79,6 +81,8 @@ function SpawnMenu:getUI()
 			size = PrimarySize,
 
 			textsize = 24,
+
+			bg = true,
 		}),
 
 		Primaries = Roact.createFragment(Primaries),
@@ -89,6 +93,8 @@ function SpawnMenu:getUI()
 			size = SecondarySize,
 
 			textsize = 24,
+
+			bg = true,
 		}),
 
 		Secondaries = Roact.createFragment(Secondaries),
@@ -119,7 +125,7 @@ function SpawnMenu.new(Primaries, Secondaries)
 		Loop = nil,
 		OffsetCF = CFrame.new(),
 	}, { __index = SpawnMenu })
-	self.handle = Roact.mount(self:getUI(), Players.LocalPlayer.PlayerGui, "Spawn Menu")
+	self.handle = Roact.mount(self:render(), Players.LocalPlayer.PlayerGui, "Spawn Menu")
 	self.Loop = RunService.PreRender:Connect(function()
 		workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
 

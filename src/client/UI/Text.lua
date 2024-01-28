@@ -12,6 +12,8 @@ function Text:init(props)
 		textsize = props.textsize or 16,
 
 		highlight= props.highlight,
+
+		bg = props.bg
 	})
 end
 
@@ -21,7 +23,7 @@ function Text:render()
 		Position = self.state.pos,
 		Size = self.state.size,
 
-		BackgroundTransparency = 0.35,
+		BackgroundTransparency = self.state.bg and 0.35 or 1,
 		BackgroundColor3 = self.state.highlight and Color3.fromRGB(173, 173, 173) or Color3.fromRGB(36, 36, 36),
 		TextColor3 = Color3.fromRGB(224, 224, 224),
 		FontFace = Font.new("rbxassetid://12187365364"),

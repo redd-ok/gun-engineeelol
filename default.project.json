@@ -52,13 +52,13 @@
       }
     },
 
-    "StarterPlayer": {
-      "StarterPlayerScripts": {
-        "ClientFramework": {
-          "$path": "src/client"
-        }
-      },
+    "ReplicatedFirst": {
+      "ClientFramework": {
+        "$path": "src/client"
+      }
+    },
 
+    "StarterPlayer": {
       "$properties" : {
         "GameSettingsAvatar" : "R6"
       }
