@@ -5,6 +5,7 @@ return {
 	Type = "Secondary",
 
 	Firemode = "Semi",
+	Firemodes = {"Semi"},
 
 	Mass = 15,
 

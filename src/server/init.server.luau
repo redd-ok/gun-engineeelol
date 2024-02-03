@@ -10,7 +10,9 @@ local SpawnLocations = {
 
 Players.PlayerAdded:Connect(function(plr)
 	plr.CharacterAdded:Connect(function(chr)
-		chr.HumanoidRootPart.Anchored = true
+		chr.PrimaryPart = chr.HumanoidRootPart
+
+		chr.PrimaryPart.Anchored = true
 	end)
 end)
 
@@ -36,6 +38,6 @@ Deploy:On(function(plr: Player, prim, sec)
 	secondModule.Parent = Inv
 
 	InitWeps:Fire(plr, {primModule, secondModule})
-
+	
 	plr.Character.PrimaryPart.Anchored = false
 end)

@@ -5,6 +5,7 @@ return {
 	Type = "Primary",
 
 	Firemode = "Auto",
+	Firemodes = {"Auto", "Semi"},
 
 	Mass = 25,
 
