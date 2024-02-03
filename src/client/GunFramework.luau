@@ -286,7 +286,7 @@ function gunfw:step(dt)
 	local vel = self.Char.PrimaryPart.AssemblyLinearVelocity
 
 	if self.Char.Humanoid.MoveDirection.Magnitude > 0 then
-		local s = relVel.Magnitude / 4
+		local s = relVel.Magnitude / 2
 		self.BobSpr.Target = self.BobSpr.Target:Lerp(
 			Vector3.new(
 				math.sin(self.Distance * s) * (1 + (s / 4)) + (relVel.X / 6),
