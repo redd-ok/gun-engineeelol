@@ -89,8 +89,8 @@ function gunfw.new(weapons)
 		end
 		for i, v in self.Configs do
 			for j, k in v.Animations do
-				self.Animator:load_animation((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k)--.rebase_target =
-					-- self.Animator.animations[self.Weapons[i].Name .. "_Idle"]
+				self.Animator:load_animation((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k) --.rebase_target =
+				-- self.Animator.animations[self.Weapons[i].Name .. "_Idle"]
 				if j == "Reload" then
 					local track = self.Animator.animations[self.Weapons[i].Name .. "_" .. j]
 					track.speed = track.length / v.ReloadTime
@@ -100,8 +100,8 @@ function gunfw.new(weapons)
 				end
 
 				-- if j ~= "Equip" and j ~= "Unequip" then
-				-- local track = self.Animator.animations[self.Weapons[i].Name .. "_" .. j]
-				-- track.rebase_target = rebaseTarget
+				local track = self.Animator.animations[self.Weapons[i].Name .. "_" .. j]
+				track.rebase_target = self.Animator.animations[self.Weapons[i].Name .. "_" .. "Idle"]
 				-- track.rebase_basis = rebaseBasis
 				-- end
 			end
