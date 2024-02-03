@@ -68,28 +68,29 @@ function gunfw.new(weapons)
 			self.Viewmodels[#self.Viewmodels + 1] = self:GenViewmodel(v)
 		end
 
-		local rebaseBasis
-		local rebaseTarget
+		-- local rebaseBasis
+		-- local rebaseTarget
 
 		for i, v in self.Configs do
 			for j, k in v.Poses do
 				self.Animator:load_pose((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k).looped = false
-				local pose = self.Animator.animations[self.Weapons[i].Name .. "_" .. j]
+				-- local pose = self.Animator.animations[self.Weapons[i].Name .. "_" .. j]
 
-				if j == "RebaseIdle" then
-					rebaseTarget = pose
-				else
-					if j == "Idle" then
-						rebaseBasis = pose
-					end
-					pose.bone_weights = v.Bones
-				end
+				-- if j == "RebaseIdle" then
+				-- 	rebaseTarget = pose
+				-- else
+				-- 	if j == "Idle" then
+				-- 		rebaseBasis = pose
+				-- 	end
+
+				-- 	pose.bone_weights = v.Bones
+				-- end
 			end
 		end
 		for i, v in self.Configs do
 			for j, k in v.Animations do
-				self.Animator:load_animation((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k) --.rebase_target =
-				--self.Animator.animations[self.Weapons[i].Name .. "_Idle"]
+				self.Animator:load_animation((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k)--.rebase_target =
+					-- self.Animator.animations[self.Weapons[i].Name .. "_Idle"]
 				if j == "Reload" then
 					local track = self.Animator.animations[self.Weapons[i].Name .. "_" .. j]
 					track.speed = track.length / v.ReloadTime
@@ -99,9 +100,9 @@ function gunfw.new(weapons)
 				end
 
 				-- if j ~= "Equip" and j ~= "Unequip" then
-					local track = self.Animator.animations[self.Weapons[i].Name .. "_" .. j]
-					track.rebase_target = rebaseTarget
-					track.rebase_basis = rebaseBasis
+				-- local track = self.Animator.animations[self.Weapons[i].Name .. "_" .. j]
+				-- track.rebase_target = rebaseTarget
+				-- track.rebase_basis = rebaseBasis
 				-- end
 			end
 		end
@@ -310,7 +311,8 @@ function gunfw:step(dt)
 		self.Distance = 0
 	end
 
-	self.SwaySpr.Target = Vector3.new(math.clamp(-md.X, -2, 2)/2, math.clamp(-md.Y, -2, 2)/2, math.clamp(-md.X, -4, 4)/2)
+	self.SwaySpr.Target =
+		Vector3.new(math.clamp(-md.X, -2, 2) / 2, math.clamp(-md.Y, -2, 2) / 2, math.clamp(-md.X, -4, 4) / 2)
 
 	self.Animator:update(dt)
 
@@ -344,7 +346,11 @@ function gunfw:step(dt)
 	PivotTo *= CFrame.new(0, 0, -1)
 	PivotTo *= CFrame.Angles(math.rad(offsetV.Y), math.rad(offsetV.X), -math.rad(offsetV.X * 1.5))
 	PivotTo *= CFrame.new(0, 0, 1)
-	PivotTo *= CFrame.Angles(math.rad(springV.Y), math.rad(springV.X), math.rad(springV.X * 1.5)) * CFrame.new(math.rad(springV.X), 0, 0)
+	PivotTo *= CFrame.Angles(math.rad(springV.Y), math.rad(springV.X), math.rad(springV.X * 1.5)) * CFrame.new(
+		math.rad(springV.X),
+		0,
+		0
+	)
 	PivotTo *= CFrame.new(math.rad(bob2V.X) + math.rad(bob2V.Z * 1.5), -math.rad(bob2V.Y), bob2V.Z)
 	PivotTo *= CFrame.Angles(math.rad(bobV.Y), math.rad(bobV.X), math.rad(bobV.Z * 1.5))
 	PivotTo *= CFrame.new(0, 0, -0.5)
