@@ -68,12 +68,22 @@ function gunfw.new(weapons)
 			self.Viewmodels[#self.Viewmodels + 1] = self:GenViewmodel(v)
 		end
 
+		local rebaseBasis
+		local rebaseTarget
+
 		for i, v in self.Configs do
 			for j, k in v.Poses do
 				self.Animator:load_pose((self.Weapons[i].Name .. "_") .. j, v.Priorities[j], k).looped = false
 				local pose = self.Animator.animations[self.Weapons[i].Name .. "_" .. j]
 
-				pose.bone_weights = v.Bones
+				if j == "RebaseIdle" then
+					rebaseTarget = pose
+				else
+					if j == "Idle" then
+						rebaseBasis = pose
+					end
+					pose.bone_weights = v.Bones
+				end
 			end
 		end
 		for i, v in self.Configs do
