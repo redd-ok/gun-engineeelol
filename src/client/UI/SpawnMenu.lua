@@ -32,7 +32,7 @@ function SpawnMenu:render()
 
 			onClick = function()
 				self.Primary = v
-				Roact.update(self.handle, self:getUI())
+				Roact.update(self.handle, self:render())
 			end,
 
 			textsize = 18,
