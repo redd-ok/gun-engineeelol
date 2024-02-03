@@ -1,1 +1,3 @@
 std = "roblox"
+
+exclude = ["src/client/canim/init.lua"]

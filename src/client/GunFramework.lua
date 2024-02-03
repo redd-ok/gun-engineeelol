@@ -100,7 +100,8 @@ function gunfw.new(weapons)
 
 				-- if j ~= "Equip" and j ~= "Unequip" then
 					local track = self.Animator.animations[self.Weapons[i].Name .. "_" .. j]
-					track.rebase_target = self.Animator.animations[self.Weapons[i].Name .. "_Idle"]
+					track.rebase_target = rebaseTarget
+					track.rebase_basis = rebaseBasis
 				-- end
 			end
 		end
@@ -256,6 +257,8 @@ end
 
 function gunfw:step(dt)
 	local vm: Model = self.Viewmodels[self.Current]
+	assert(vm.PrimaryPart, "Viewmodel PrimaryPart must be defined.")
+
 	local cfg = self.Configs[self.Current]
 
 	for i, v in self.Viewmodels do
