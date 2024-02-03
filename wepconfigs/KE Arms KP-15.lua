@@ -1,6 +1,6 @@
 return {
 	Ammo = 30,
-	RPM = 800,
+	RPM = 600,
 
 	Type = "Primary",
 
