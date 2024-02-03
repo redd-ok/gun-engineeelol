@@ -29,6 +29,9 @@ function gunfw.new(weapons)
 		LastLook = Vector2.new(),
 		RecoilCF = CFrame.new(),
 		AimCF = CFrame.new(),
+		StanceCF = CFrame.new(),
+
+		Stance = 0,
 
 		SwaySpr = Spring.new(15, 85, 2, 5),
 		BobSpr = Spring.new(15, 85, 4, 4),
@@ -113,6 +116,14 @@ function gunfw.new(weapons)
 		self.Connections.InputBegan = UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
 			if not gameProcessedEvent then
 				self:inputBegan(input)
+			end
+		end)
+		self.Connections.InputChanged = UserInputService.InputChanged:Connect(function(input, gameProcessedEvent)
+			if not gameProcessedEvent then
+				if input.UserInputType == Enum.UserInputType.MouseWheel then
+					self.Stance += input.Position.Z
+					self.Stance = math.clamp(self.Stance, -1, 1)
+				end
 			end
 		end)
 		self.Connections.InputEnded = UserInputService.InputEnded:Connect(function(input, gameProcessedEvent)
@@ -273,7 +284,7 @@ function gunfw:step(dt)
 
 	local md = UserInputService:GetMouseDelta()
 
-	if not self.Aimming then
+	if not self.Aimming or self.Stance ~= 0 then
 		self.OffsetSpr.Target -= Vector3.new(md.X, md.Y) / 8
 	else
 		self.OffsetSpr.Target = Vector3.new()
@@ -363,6 +374,15 @@ function gunfw:step(dt)
 	local Y = math.sin(math.sin(tick() * 0.7)) * 0.6
 	local X = math.cos(math.cos(tick() * 0.5)) * 0.5
 	PivotTo *= CFrame.new(X/45, (Y)/45, 0) * CFrame.Angles(0, X/45, -X/45)
+
+	if self.Stance ~= 0 and not self.Sprinting and not self.Aimming then
+		self.StanceCF = self.StanceCF:Lerp(cfg.StanceCFrames[self.Stance == 1 and 1 or 2], 0.1)
+	else
+		self.StanceCF = self.StanceCF:Lerp(CFrame.new(), 0.1)
+		self.Stance = 0
+	end
+
+	PivotTo *= self.StanceCF
 
 	vm:PivotTo(PivotTo)
 
