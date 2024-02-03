@@ -11,7 +11,6 @@ local SpawnLocations = {
 Players.PlayerAdded:Connect(function(plr)
 	plr.CharacterAdded:Connect(function(chr)
 		chr.PrimaryPart = chr.HumanoidRootPart
-
 		chr.PrimaryPart.Anchored = true
 	end)
 end)
