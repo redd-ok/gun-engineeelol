@@ -22,7 +22,8 @@ return {
 	Bones = {},
 
 	StanceCFrames = {
-		Up = CFrame.Angles(math.rad(40), math.rad(25), 0)
+		CFrame.new(0.3, -0.7, 0.1) * CFrame.Angles(math.rad(25), math.rad(5), math.rad(4)), -- Up
+		CFrame.new(0.1, 0.1, -0.1) * CFrame.Angles(math.rad(-10), math.rad(5), math.rad(4)), -- Low
 	},
 
 	Poses = {
