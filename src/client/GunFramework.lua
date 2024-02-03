@@ -360,6 +360,10 @@ function gunfw:step(dt)
 	PivotTo *= CFrame.new(0, 0, 0.5)
 	PivotTo *= aimOffset
 
+	local Y = math.sin(math.sin(tick() * 0.7)) * 0.6
+	local X = math.cos(math.cos(tick() * 0.5)) * 0.5
+	PivotTo *= CFrame.new(X/45, (Y)/45, 0) * CFrame.Angles(0, X/45, -X/45)
+
 	vm:PivotTo(PivotTo)
 
 	self.Char.Humanoid.WalkSpeed = self.Char.Humanoid.WalkSpeed
